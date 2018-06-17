@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/treeData.min.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div clsee="row">
+        <div class="col-lg-4 col-md-5 col-sm-6 col-xs-12">
+            <a href="#popup1" class="popup_btn">ツール説明</a>
+            <div id="popup1" class="popup">
+                <div class="popup_inner">
+                <div>
+                    <a href="#close_btn" class="close_btn">閉じる</a>
+                </div>
+                </div>
+            </div>
+            <div id="overlay"></div>
+        <div class="btn-group">
+            <div class="btn-group">
+                <button title="エディタのフォントサイズ変更" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-search"></i> <span class="caret"></span></button>
+                <ul class="dropdown-menu" id="font-size">
+                    <li><a href="#" data-size="10">小さい</a></li>
+                    <li><a href="#" data-size="12">普通</a></li>
+                    <li><a href="#" data-size="14">大きい</a></li>
+                </ul>
+            </div>
+            @*<button id="bold" class="btn btn-default"><i class="glyphicon glyphicon-bold"></i></button>*@
+            @*<button id="save" class="btn btn-default"><i class="glyphicon glyphicon-floppy-save"></i></button>*@
+            @*<button id="load" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i></button>*@
+            <button id="debug" title="可視化デバッグ実行開始(最初に1回必ず押す)" class="btn btn-default"><i class="glyphicon glyphicon-play"></i></button>@*コンパイル済みならデバッグ開始*@
+            <button id="stop" title="可視化デバッグ終了" class="btn btn-default"><i class="glyphicon glyphicon-stop"></i></button>@*デバッグ中なら停止*@
+            <button id="reset" title="実行中のプログラムを最初に戻す" class="btn btn-default"><i class="glyphicon glyphicon-backward"></i></button>@*コンパイル済みならデバッグ開始*@
+            <button id="back" title="前の式に戻る" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i></button>@*デバッグ開始済みなら1ステップ戻る*@
+            <button id="step" title="次の式を実行する(次に実行する式をハイライト)" class="btn btn-default"><i class="glyphicon glyphicon-arrow-right"></i></button>@*デバッグ開始済みなら1ステップ進む*@
+            <button id="exec" title="実行中のプログラムを最後まで実行する" class="btn btn-default"><i class="glyphicon glyphicon-forward"></i></button> @*コンパイル済みなら実行*@
+
+        </div>
+
+            <div id="debugStatus">DebugStatus:</div><br>
+            <button id="exstart">実験開始</button>
+            <button id="exans">答えを確認</button>
+            <br>
+            <div id="description"></div>
+            <div id="editorMain" style="height: 80%"></div>
+            <br>
+            <div id="output" style="height: 22%"></div>
+            <div role="tablist" aria-multiselectable="true" class="panel-group" id="accordion-1">
+                <div class="panel panel-default">
+                    <div role="tab" class="panel-heading">
+                        <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion-1" aria-expanded="true" href="#accordion-1 .item-1">File Upload </a></h4></div>
+                    <div role="tabpanel" class="panel-collapse collapse in item-1">
+                        <div class="panel-body">
+                            <ul id="filelist">
+                                <li>アップロードされたファイルはここにファイルパスが表示されます。</li>
+                            </ul>
+                            <!-- @helper.form(action = routes.VisualizerController.upload, 'enctype -> "multipart/form-data", 'id -> "my-form") {
+                                <input type="file" name="files">
+                                <button type="button" onclick="file_upload()">アップロード</button>
+                            } -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="canvasContainer" class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
+            <canvas id="display" style="width: 100%;height: 95vh; border: 1px black solid"></canvas>
+        </div>
+    </div>
+    <br />
+</body>
+
+</html>
+<script src="index.js"></script>
