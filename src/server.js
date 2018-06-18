@@ -11,8 +11,8 @@ class Field {
         this.textOnEditor = "";
         this.isFirstEOF = false;
     }
-
 }
+
 export default class Server {
     constructor() {
         this.field = new Field();
@@ -172,7 +172,7 @@ export default class Server {
                     const output = this.field.outputsHistory[this.field.count];
                     const ret = {
                         "stackData": stackData,
-                        "debugState": ("Step:" + this.field.count.toString),
+                        "debugState": ("Step:" + this.field.count),
                         "output": output,
                         "sourcetext": sourcetext
                     };
@@ -188,7 +188,7 @@ export default class Server {
                     // }
                     const stackData = this.recordExecState(state);
                     const output = this.getOutput();
-                    let stateText = ("Step:" + this.field.count.toString);
+                    let stateText = ("Step:" + this.field.count);
                     if (this.field.engine.getIsWaitingForStdin()) {
                         stateText = "scanf";
                     }
