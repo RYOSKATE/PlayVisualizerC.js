@@ -5,18 +5,19 @@
 <head>
     <meta charset="utf-8" />
     <title>JPlayVisualizerC</title>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/mode-c_cpp.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ext-language_tools.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jcanvas/16.5.23/jcanvas.js" type="text/javascript"></script>
-    <script src="https://cdn.rawgit.com/maxkueng/victor/master/build/victor.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/treeData.min.css">
-    <script src="js/jquery-2.1.4.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/treeData.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png ">
+
+    <script src="js/jquery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- <script src="js/ace/ace.js" type="text/javascript"></script>
+    <script src="js/ace/mode-c_cpp.js" type="text/javascript"></script>
+    <script src="js/ace/ext-language_tools.js" type="text/javascript"></script> -->
+    <script src="js/jcanvas.js" type="text/javascript"></script>
+    <script src="js/victor.min.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -24,10 +25,10 @@
         <div class="row">
             <div clsee="row">
                 <div class="col-lg-4 col-md-5 col-sm-6 col-xs-12">
-                    <a href="#popup1" class="popup_btn">ツール説明</a>
+                    <a href="#popup1" class="popup_btn">How to use</a>
                     <div id="popup1" class="popup">
                         <div class="popup_inner">
-                            <h4>ツール説明</h4>
+                            <h4>How to use</h4>
                             <p>下のエディタにプログラムを書き、上のボタンを押すことで可視化実行ができます。</p>
                             <p>(マウスカーソルを重ねるとで各ボタンの説明が表示されます。)</p>
                             <p>実験前にデフォルトで表示されているプログラムをステップ実行して、</p>
@@ -61,42 +62,50 @@
                                 </li>
                             </ul>
                         </div>
-                        @*
+                        <!-- 
                         <button id="bold" class="btn btn-default">
                             <i class="glyphicon glyphicon-bold"></i>
-                        </button>*@ @*
+                        </button>-->
+                        <!-- 
                         <button id="save" class="btn btn-default">
                             <i class="glyphicon glyphicon-floppy-save"></i>
-                        </button>*@ @*
+                        </button>-->
+                        <!-- 
                         <button id="load" class="btn btn-default">
                             <i class="glyphicon glyphicon-folder-open"></i>
-                        </button>*@
+                        </button>-->
                         <button id="debug" title="可視化デバッグ実行開始(最初に1回必ず押す)" class="btn btn-default">
                             <i class="glyphicon glyphicon-play"></i>
-                        </button>@*コンパイル済みならデバッグ開始*@
+                        </button>
+                        <!-- コンパイル済みならデバッグ開始-->
                         <button id="stop" title="可視化デバッグ終了" class="btn btn-default">
                             <i class="glyphicon glyphicon-stop"></i>
-                        </button>@*デバッグ中なら停止*@
+                        </button>
+                        <!-- デバッグ中なら停止-->
                         <button id="reset" title="実行中のプログラムを最初に戻す" class="btn btn-default">
                             <i class="glyphicon glyphicon-backward"></i>
-                        </button>@*コンパイル済みならデバッグ開始*@
+                        </button>
+                        <!-- コンパイル済みならデバッグ開始-->
                         <button id="back" title="前の式に戻る" class="btn btn-default">
                             <i class="glyphicon glyphicon-arrow-left"></i>
-                        </button>@*デバッグ開始済みなら1ステップ戻る*@
+                        </button>
+                        <!-- デバッグ開始済みなら1ステップ戻る-->
                         <button id="step" title="次の式を実行する(次に実行する式をハイライト)" class="btn btn-default">
                             <i class="glyphicon glyphicon-arrow-right"></i>
-                        </button>@*デバッグ開始済みなら1ステップ進む*@
+                        </button>
+                        <!-- デバッグ開始済みなら1ステップ進む-->
                         <button id="exec" title="実行中のプログラムを最後まで実行する" class="btn btn-default">
                             <i class="glyphicon glyphicon-forward"></i>
-                        </button> @*コンパイル済みなら実行*@
+                        </button>
+                        <!-- コンパイル済みなら実行-->
 
                     </div>
 
                     <div id="debugStatus">DebugStatus:</div>
-                    <br>
+                    <!-- <br>
                     <button id="exstart">実験開始</button>
                     <button id="exans">答えを確認</button>
-                    <br>
+                    <br> -->
                     <div id="description"></div>
                     <div id="editorMain" style="height: 80%"></div>
                     <br>
@@ -113,10 +122,10 @@
                                     <ul id="filelist">
                                         <li>アップロードされたファイルはここにファイルパスが表示されます。</li>
                                     </ul>
-                                    @helper.form(action = routes.VisualizerController.upload, 'enctype -> "multipart/form-data", 'id -> "my-form") {
+                                    <!-- @helper.form(action = routes.VisualizerController.upload, 'enctype -> "multipart/form-data", 'id -> "my-form") { -->
                                     <input type="file" name="files">
-                                    <button type="button" onclick="file_upload()">アップロード</button>
-                                    }
+                                    <button type="button" onclick="file_upload()">Submit</button>
+                                    <!-- } -->
                                 </div>
                             </div>
                         </div>
@@ -126,13 +135,18 @@
                     <canvas id="display" style="width: 100%;height: 95vh; border: 1px black solid"></canvas>
                 </div>
 
-                @*
-                <div class="col-lg-12 col-md-12">*@ @*処理の流れ
-                    <br>*@ @*実行ボタン：JavaScriptでイベント取得。エディタ上のテキストを取得。Fromの形でPOST(JavaScript)
-                    <br>*@ @*コントローラはポストされたデータを取得。アクション関数で文字列の処理など。(Scala,String)ビューにセット。
-                    <br>*@ @*ビュー：生文字を取得(改行文字に注意)。JavaScriptでコメント文字など操作してセット。
-                    <br>*@ @*
-                </div>*@
+                <!-- 
+                <div class="col-lg-12 col-md-12">-->
+                <!-- 処理の流れ
+                    <br>-->
+                <!-- 実行ボタン：JavaScriptでイベント取得。エディタ上のテキストを取得。Fromの形でPOST(JavaScript)
+                    <br>-->
+                <!-- コントローラはポストされたデータを取得。アクション関数で文字列の処理など。(Scala,String)ビューにセット。
+                    <br>-->
+                <!-- ビュー：生文字を取得(改行文字に注意)。JavaScriptでコメント文字など操作してセット。
+                    <br>-->
+                <!-- 
+                </div>-->
             </div>
         </div>
     </div>
@@ -140,6 +154,7 @@
 </body>
 
 </html>
-<script src="index.js"></script>
-<script src="visualizer.js"></script>
-<script src="visualizerEditor.js"></script>
+
+<!-- <script src="js/visualizer/visualizerEditor.js"></script>
+<script src="js/visualizer/visualizer.js"></script> -->
+<script src="js/visualizer/index.js"></script>
