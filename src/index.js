@@ -538,7 +538,9 @@ function send(jsondata) {
     if (ret.debugState == "scanf") {
       localStorage.isScanf = "true";
     }
-    drawVisualizedResult(ret);
+    if (ret) {
+      drawVisualizedResult(ret);
+    }
   } else {
     alert("invalid data");
   }

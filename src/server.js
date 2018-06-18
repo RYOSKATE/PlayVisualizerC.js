@@ -141,42 +141,22 @@ export default class Server {
                 return ret;
             }
             case "exec": {
-                let state = null;//ExecState
-                let node;
-                const engine = this.field.engine;
-                const gen = engine.executeStepByStep(dec);
-                do {
-                    this.field.count += 1
-                    node = gen.next();
-                    const ret = node.value;
-                    state = engine.getCurrentState();
-                    this.recordExecState(state);
-                    this.getOutput();
-                    if (engine.isDebugMode) {
-                        console.log(ret);
-                        // console.log(this.getCurrentExpr());
-                        // console.log(this.state.make());
-                    }
-                } while (!node.done);
-                let stateText = "EOF";
-                if (this.field.engine.getIsWaitingForStdin()) {
-                    stateText = "scanf"
-                }
-                this.field.count = this.field.stateHistory.length - 1
-                const stackData = this.field.stateHistory[this.field.count];
-                const output = this.field.outputsHistory[this.field.count];
-                const ret = {
+                const json = {
                     "stackData": stackData,
-                    "debugState": stateText,
+                    "debugState": "step",
                     "output": output,
                     "sourcetext": sourcetext
                 };
+                let ret;
+                do {
+                    ret = this.ajaxCall(json);
+                } while (ret.debugState != "EOF");
                 return ret;
             }
             case "reset": {
                 this.field.count = 0
                 const stackData = this.field.stateHistory[this.field.count];
-                const output = this.field.outputsHistory.get(this.field.count);
+                const output = this.field.outputsHistory[this.field.count];
                 const ret = {
                     "stackData": stackData,
                     "debugState": ("Step:" + this.field.count),
@@ -189,7 +169,7 @@ export default class Server {
                 this.field.count += 1
                 if (this.field.count < this.field.stateHistory.length - 1) {
                     const stackData = this.field.stateHistory[this.field.count];
-                    const output = this.field.outputsHistory.get(this.field.count);
+                    const output = this.field.outputsHistory[this.field.count];
                     const ret = {
                         "stackData": stackData,
                         "debugState": ("Step:" + this.field.count.toString),
@@ -282,6 +262,7 @@ export default class Server {
     //             }
 
     getOutput() {
+        this.field.outputsHistory.push('');
         return '';
     }
 
