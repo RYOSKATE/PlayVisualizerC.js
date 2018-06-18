@@ -183,9 +183,9 @@ export default class Server {
                         this.field.engine.setIn(stdinText);
                     }
                     let state = this.field.engine.stepExecute();
-                    // while (state.getCurrentExpr().codeRange == null) {
-                    //     state = this.field.engine.stepExecute()
-                    // }
+                    while (state.getCurrentExpr().codeRange == null) {
+                        state = this.field.engine.stepExecute()
+                    }
                     const stackData = this.recordExecState(state);
                     const output = this.getOutput();
                     let stateText = ("Step:" + this.field.count);

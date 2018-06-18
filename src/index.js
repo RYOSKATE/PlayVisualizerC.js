@@ -718,8 +718,8 @@ function drawVisualizedResult(jsondata) {
   if (localStorage.debug != "true") {
   } else {
     // document.getElementById("exstart").disabled = "true";
-    require("ace-min-noconflict");
-    var Range = ace.Range;
+    require('ace-min-noconflict');
+    var Range = ace.require("ace/range").Range;
     var d = data[0];
     var codeRange = d.currentExpr.codeRange;
     if (jsondata.debugState == "EOF") {
