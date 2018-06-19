@@ -13,7 +13,7 @@ class Field {
     }
 }
 
-export default class Server {
+class Server {
     constructor() {
         this.field = new Field();
         this.tmpDirName = 'pvc-tmp';
@@ -271,3 +271,6 @@ export default class Server {
         return execState;
     }
 }
+
+const server = new Server();
+export default server;
