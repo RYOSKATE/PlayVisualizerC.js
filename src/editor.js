@@ -65,10 +65,15 @@ export const createEditor = (idName, canWrite, initText) => {
     editor.setReadOnly(!canWrite);
 
     if (canWrite) {
+        const showNotDebuggingMsg = () => {
+            alert("デバッグ開始ボタンを押してください");
+            $('canvas').clearCanvas();
+        };
         $('#debug').click(function (e) {
             const text = editor.getValue();
             if (text.length <= 1) {
-                alert("ソースコードがありません！")
+                alert("ソースコードがありません！");
+                $('canvas').clearCanvas();
             }
             else {
                 const jsondata = { //送りたいJSONデータ
@@ -93,7 +98,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 send(jsondata, editor);
             }
             else {
-                alert("デバッグ開始ボタンを押してください");
+                showNotDebuggingMsg();
             }
         });
         $('#exec').click(function (e) {
@@ -107,7 +112,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 send(jsondata, editor);
             }
             else {
-                alert("デバッグ開始ボタンを押してください");
+                showNotDebuggingMsg();
             }
         });
 
@@ -122,7 +127,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 send(jsondata, editor);
             }
             else {
-                alert("デバッグ開始ボタンを押してください");
+                showNotDebuggingMsg();
             }
         });
         $('#back').click(function (e) {
@@ -136,7 +141,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 send(jsondata, editor);
             }
             else {
-                alert("デバッグ開始ボタンを押してください");
+                showNotDebuggingMsg();
             }
 
         });
@@ -154,7 +159,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 localStorage.line = 0;
             }
             else {
-                alert("デバッグが開始されていません");
+                showNotDebuggingMsg();
             }
         });
     }
