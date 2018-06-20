@@ -28,12 +28,12 @@ class Server {
         return this.field;
     }
 
-    getUserDir() {
-        if (fs.accessSync(this.tmpDirName)) {
-            fs.mkdirSync(this.tmpDirName); // mkdir -p
-        }
-        return this.tmpDirName;
-    }
+    // getUserDir() {
+    //     if (fs.accessSync(this.tmpDirName)) {
+    //         fs.mkdirSync(this.tmpDirName); // mkdir -p
+    //     }
+    //     return this.tmpDirName;
+    // }
 
     // public getUserDirFilesStr(uuid: String): Array<String> {
     //     const dirpStr = this.getUserDir(uuid);
@@ -132,7 +132,8 @@ class Server {
                 const node = this.rawDataToUniTree(this.field.textOnEditor);//UniProgram
                 const state = this.field.engine.startStepExecution(node);
                 const stackData = this.recordExecState(state);
-                const output = this.getOutput();
+                const stdout = this.field.engine.getStdout();
+                const output = this.recordOutputText(stdout);
                 this.isExecuting = true;
                 const ret = {
                     "stackData": stackData,
@@ -189,7 +190,8 @@ class Server {
                         state = this.field.engine.stepExecute();
                     }
                     const stackData = this.recordExecState(state);
-                    const output = this.getOutput();
+                    const stdout = this.field.engine.getStdout();
+                    const output = this.recordOutputText(stdout);
                     let stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
                     if (this.field.engine.getIsWaitingForStdin()) {
                         stateText = "scanf";
@@ -266,9 +268,9 @@ class Server {
     //                 return uuid
     //             }
 
-    getOutput() {
-        this.field.outputsHistory.push('');
-        return '';
+    recordOutputText(output) {
+        this.field.outputsHistory.push(output);
+        return output;
     }
 
     recordExecState(execState) {
