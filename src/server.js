@@ -192,12 +192,14 @@ class Server {
                     const stackData = this.recordExecState(state);
                     const stdout = this.field.engine.getStdout();
                     const output = this.recordOutputText(stdout);
-                    let stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
+                    let stateText;
                     if (this.field.engine.getIsWaitingForStdin()) {
                         stateText = "scanf";
                     } else if (!this.field.engine.isStepExecutionRunning()) {
                         stateText = "EOF";
                         this.isExecuting = false;
+                    } else {
+                        stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
                     }
                     const ret = {
                         "stackData": stackData,

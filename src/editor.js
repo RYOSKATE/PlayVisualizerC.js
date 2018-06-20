@@ -194,17 +194,19 @@ const send = (jsondata, editor) => {
     if (jsondata.debugState == "debug") {
         dispLoading("コンパイル中...");
     }
-    const ret = server.ajaxCall(jsondata);
-    if (ret != null) {
-        document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
-        if (ret.debugState == "scanf") {
-            localStorage.isScanf = "true";
+    setTimeout(() => {// コンパイル中の文字を表示が画面に反映されるのを待つため。
+        const ret = server.ajaxCall(jsondata);
+        if (ret != null) {
+            document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
+            if (ret.debugState == "scanf") {
+                localStorage.isScanf = "true";
+            }
+            if (ret) {
+                drawVisualizedResult(ret, editor);
+            }
+        } else {
+            alert("invalid data");
         }
-        if (ret) {
-            drawVisualizedResult(ret, editor);
-        }
-    } else {
-        alert("invalid data");
-    }
-    removeLoading();
+        removeLoading();
+    }, 100);
 }
