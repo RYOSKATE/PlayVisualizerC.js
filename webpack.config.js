@@ -24,7 +24,7 @@ module.exports = (env, argv) => {
       index: './src/index.js',
     },
     output: {
-      path: require("path").resolve("./docs/js/visualizer/"),
+      path: require("path").resolve("./docs/js/"),
       filename: '[name].js',
       devtoolModuleFilenameTemplate: '[absolute-resource-path]'
     },

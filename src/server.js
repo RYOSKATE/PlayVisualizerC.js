@@ -4,7 +4,7 @@ const unicoen = require('./unicoen').default;
 class Field {
     constructor() {
         this.count = 0;
-        this.engine = new unicoen.Engine();
+        this.engine = new unicoen.CPP14Engine();
         //this.baos = new ByteArrayOutputStream();
         this.stateHistory = new Array();// <string>
         this.outputsHistory = new Array();// <string>
@@ -17,6 +17,7 @@ class Server {
     constructor() {
         this.field = new Field();
         this.tmpDirName = 'pvc-tmp';
+        this.isExecuting = false;
     }
 
     isFieldExist() {
@@ -132,6 +133,7 @@ class Server {
                 const state = this.field.engine.startStepExecution(node);
                 const stackData = this.recordExecState(state);
                 const output = this.getOutput();
+                this.isExecuting = true;
                 const ret = {
                     "stackData": stackData,
                     "debugState": "in Debugging",
@@ -172,25 +174,28 @@ class Server {
                     const output = this.field.outputsHistory[this.field.count];
                     const ret = {
                         "stackData": stackData,
-                        "debugState": ("Step:" + this.field.count),
+                        "debugState": `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`,
                         "output": output,
                         "sourcetext": sourcetext
                     };
                     return ret;
-                } else if (this.field.engine.isStepExecutionRunning()) {
+                } else if (this.isExecuting) {
                     if (this.field.engine.getIsWaitingForStdin()) {
                         const stdinText = obj["stdinText"];
                         this.field.engine.setIn(stdinText);
                     }
                     let state = this.field.engine.stepExecute();
                     while (state.getCurrentExpr().codeRange == null) {
-                        state = this.field.engine.stepExecute()
+                        state = this.field.engine.stepExecute();
                     }
                     const stackData = this.recordExecState(state);
                     const output = this.getOutput();
-                    let stateText = ("Step:" + this.field.count);
+                    let stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
                     if (this.field.engine.getIsWaitingForStdin()) {
                         stateText = "scanf";
+                    } else if (!this.field.engine.isStepExecutionRunning()) {
+                        stateText = "EOF";
+                        this.isExecuting = false;
                     }
                     const ret = {
                         "stackData": stackData,
@@ -202,7 +207,7 @@ class Server {
                 } else {
                     this.field.count = this.field.stateHistory.length - 1
                     const ret = {
-                        "stackData": this.field.stateHistory.last,
+                        "stackData": this.getLastHistory(),
                         "debugState": "EOF",
                         "output": "",
                         "sourcetext": sourcetext
@@ -218,7 +223,7 @@ class Server {
                 const output = this.field.outputsHistory[this.field.count];
                 const ret = {
                     "stackData": stackData,
-                    "debugState": ("Step:" + this.field.count),
+                    "debugState": `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`,
                     "output": output,
                     "sourcetext": sourcetext
                 };
@@ -227,7 +232,7 @@ class Server {
             case "stop": {
                 this.field.engine = null
                 const ret = {
-                    "stackData": this.field.stateHistory.last,
+                    "stackData": this.getLastHistory(),
                     "debugState": "STOP",
                     "output": "",
                     "sourcetext": sourcetext
@@ -269,6 +274,10 @@ class Server {
     recordExecState(execState) {
         this.field.stateHistory.push(execState);
         return execState;
+    }
+
+    getLastHistory() {
+        return this.field.stateHistory[this.field.stateHistory.length - 1];
     }
 }
 
