@@ -202,17 +202,17 @@ const send = (jsondata, editor) => {
     setTimeout(() => {// コンパイル中の文字を表示が画面に反映されるのを待つため。
         new Promise((resolve, reject) => {
             const ret = server.ajaxCall(jsondata);
-            resolve(ret, reject);
-        }).then((ret, reject) => {
             if (ret != null) {
-                document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
-                if (ret.debugState == "scanf") {
-                    localStorage.isScanf = "true";
-                }
-                drawVisualizedResult(ret, editor);
+                resolve(ret);
             } else {
                 reject();
             }
+        }).then((ret) => {
+            document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
+            if (ret.debugState == "scanf") {
+                localStorage.isScanf = "true";
+            }
+            drawVisualizedResult(ret, editor);
         }).catch(() => {
             alert("invalid data");
         }).finally(() => {
