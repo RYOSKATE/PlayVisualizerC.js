@@ -183,7 +183,7 @@ class Server {
                 } else if (this.isExecuting) {
                     if (this.field.engine.getIsWaitingForStdin()) {
                         const stdinText = obj["stdinText"];
-                        this.field.engine.setIn(stdinText);
+                        this.field.engine.stdin(stdinText);
                     }
                     let state = this.field.engine.stepExecute();
                     let maxSkip = 10;
