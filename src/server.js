@@ -153,7 +153,7 @@ class Server {
                 let ret;
                 do {
                     ret = this.ajaxCall(json);
-                } while (ret.debugState != "EOF");
+                } while (ret.debugState != "EOF" || ret.debugState != "scanf");
                 return ret;
             }
             case "reset": {
