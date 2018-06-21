@@ -200,18 +200,23 @@ const send = (jsondata, editor) => {
         dispLoading("コンパイル中...");
     }
     setTimeout(() => {// コンパイル中の文字を表示が画面に反映されるのを待つため。
-        const ret = server.ajaxCall(jsondata);
-        if (ret != null) {
-            document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
-            if (ret.debugState == "scanf") {
-                localStorage.isScanf = "true";
-            }
-            if (ret) {
+        new Promise((resolve, reject) => {
+            const ret = server.ajaxCall(jsondata);
+            resolve(ret, reject);
+        }).then((ret, reject) => {
+            if (ret != null) {
+                document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
+                if (ret.debugState == "scanf") {
+                    localStorage.isScanf = "true";
+                }
                 drawVisualizedResult(ret, editor);
+            } else {
+                reject();
             }
-        } else {
+        }).catch(() => {
             alert("invalid data");
-        }
-        removeLoading();
+        }).finally(() => {
+            removeLoading();
+        });
     }, 100);
 }
