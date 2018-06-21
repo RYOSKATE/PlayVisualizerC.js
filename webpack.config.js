@@ -1,21 +1,6 @@
 const webpack = require('webpack');
 // optimization.minimizerを上書きするために必要なプラグイン
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const path = require('path');
-
-const threadLoader = {
-  loader: 'thread-loader',
-  options: {
-    workers: require('os').cpus().length - 1,
-  },
-};
-
-const babelLoader = {
-  loader: 'babel-loader',
-  options: {
-    cacheDirectory: true,
-  }
-};
 
 module.exports = (env, argv) => {
   const IS_DEVELOPMENT = argv.mode === 'development';
@@ -34,16 +19,22 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [{
-        test: /\.ts(x?)$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: [
           { loader: 'cache-loader' },
-          threadLoader,
-          babelLoader,
           {
-            loader: 'ts-loader',
-            options: { happyPackMode: true }
-          }
+            loader: 'thread-loader',
+            options: {
+              workers: require('os').cpus().length - 1,
+            },
+          },
+          {
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: true,
+            }
+          },
         ]
       }
       ]
