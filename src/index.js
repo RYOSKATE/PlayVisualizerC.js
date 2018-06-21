@@ -1,7 +1,7 @@
 import { createConsoleEditor, createEditor } from './editor';
 
 const editor = createEditor('editorMain', true, "");
-const consolEditor = createConsoleEditor("output", "");
+const consolEditor = createConsoleEditor("output", "", editor);
 
 $(document).on('click', '.popup_btn', function () {
   // ポップアップの幅と高さからmarginを計算する

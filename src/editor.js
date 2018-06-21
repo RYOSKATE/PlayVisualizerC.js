@@ -2,7 +2,7 @@ import { drawMemoryState } from './painter';
 import { dispLoading, removeLoading } from './window';
 import server from './server';
 
-export const createConsoleEditor = (idName, text) => {
+export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
     require('ace-min-noconflict');
     require('ace-min-noconflict/mode-c_cpp');
     require('ace-min-noconflict/theme-terminal');
@@ -35,7 +35,7 @@ export const createConsoleEditor = (idName, text) => {
                 "stdinText": text
             };
             localStorage.isScanf = "false";
-            send(jsondata, editor);
+            send(jsondata, sourceCodeEditor);
         }
     });
     outputEditor.setValue(text, 1);
@@ -45,24 +45,24 @@ export const createEditor = (idName, canWrite, initText) => {
     require('ace-min-noconflict');
     require('ace-min-noconflict/mode-c_cpp');
     require('ace-min-noconflict/theme-monokai');
-    const editor = ace.edit(idName);
+    const sourceCodeEditor = ace.edit(idName);
     if (canWrite) {
-        editor.$blockScrolling = Infinity;
-        editor.setOptions({
+        sourceCodeEditor.$blockScrolling = Infinity;
+        sourceCodeEditor.setOptions({
             enableBasicAutocompletion: true,//基本的な自動補完
             enableSnippets: true,//スニペット
             enableLiveAutocompletion: true//ライブ補完
         });
     }
-    editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/c_cpp");//シンタックスハイライトと自動補完
-    //editor.getSession().setUseWrapMode(true);//true:折り返し、false:横スクロールバー
+    sourceCodeEditor.setTheme("ace/theme/monokai");
+    sourceCodeEditor.getSession().setMode("ace/mode/c_cpp");//シンタックスハイライトと自動補完
+    //sourceCodeEditor.getSession().setUseWrapMode(true);//true:折り返し、false:横スクロールバー
 
     $('#font-size').click(function (e) {
-        editor.setFontSize($(e.target).data('size'));
+        sourceCodeEditor.setFontSize($(e.target).data('size'));
     });
 
-    editor.setReadOnly(!canWrite);
+    sourceCodeEditor.setReadOnly(!canWrite);
 
     if (canWrite) {
         const showNotDebuggingMsg = () => {
@@ -70,7 +70,7 @@ export const createEditor = (idName, canWrite, initText) => {
             $('canvas').clearCanvas();
         };
         $('#debug').click(function (e) {
-            const text = editor.getValue();
+            const text = sourceCodeEditor.getValue();
             if (text.length <= 1) {
                 alert("ソースコードがありません！");
                 $('canvas').clearCanvas();
@@ -82,7 +82,7 @@ export const createEditor = (idName, canWrite, initText) => {
                     "output": "",
                     "sourcetext": text
                 };
-                send(jsondata, editor);
+                send(jsondata, sourceCodeEditor);
                 localStorage.line = 0;
                 localStorage.debug = "true";
             }
@@ -93,9 +93,9 @@ export const createEditor = (idName, canWrite, initText) => {
                     "stackData": "",
                     "debugState": "reset",
                     "output": "",
-                    "sourcetext": editor.getValue()
+                    "sourcetext": sourceCodeEditor.getValue()
                 };
-                send(jsondata, editor);
+                send(jsondata, sourceCodeEditor);
             }
             else {
                 showNotDebuggingMsg();
@@ -107,9 +107,9 @@ export const createEditor = (idName, canWrite, initText) => {
                     "stackData": "",
                     "debugState": "exec",
                     "output": "",
-                    "sourcetext": editor.getValue()
+                    "sourcetext": sourceCodeEditor.getValue()
                 };
-                send(jsondata, editor);
+                send(jsondata, sourceCodeEditor);
             }
             else {
                 showNotDebuggingMsg();
@@ -122,9 +122,9 @@ export const createEditor = (idName, canWrite, initText) => {
                     "stackData": "",
                     "debugState": "step",
                     "output": "",
-                    "sourcetext": editor.getValue()
+                    "sourcetext": sourceCodeEditor.getValue()
                 };
-                send(jsondata, editor);
+                send(jsondata, sourceCodeEditor);
             }
             else {
                 showNotDebuggingMsg();
@@ -136,9 +136,9 @@ export const createEditor = (idName, canWrite, initText) => {
                     "stackData": "",
                     "debugState": "back",
                     "output": "",
-                    "sourcetext": editor.getValue()
+                    "sourcetext": sourceCodeEditor.getValue()
                 };
-                send(jsondata, editor);
+                send(jsondata, sourceCodeEditor);
             }
             else {
                 showNotDebuggingMsg();
@@ -151,9 +151,9 @@ export const createEditor = (idName, canWrite, initText) => {
                     "stackData": "",
                     "debugState": "stop",
                     "output": "",
-                    "sourcetext": editor.getValue()
+                    "sourcetext": sourceCodeEditor.getValue()
                 };
-                send(jsondata, editor);
+                send(jsondata, sourceCodeEditor);
                 $('canvas').clearCanvas();
                 localStorage.debug = "false";
                 localStorage.line = 0;
@@ -165,8 +165,8 @@ export const createEditor = (idName, canWrite, initText) => {
     }
 
     if (initText != '')
-        editor.setValue(initText, -1);
-    return editor;
+        sourceCodeEditor.setValue(initText, -1);
+    return sourceCodeEditor;
 }
 
 const drawVisualizedResult = (jsondata, editor) => {

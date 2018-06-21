@@ -186,20 +186,19 @@ class Server {
                         this.field.engine.setIn(stdinText);
                     }
                     let state = this.field.engine.stepExecute();
-                    while (state.getCurrentExpr().codeRange == null) {
+                    let maxSkip = 10;
+                    while (state.getCurrentExpr().codeRange == null && 0 < --maxSkip) {
                         state = this.field.engine.stepExecute();
                     }
                     const stackData = this.recordExecState(state);
                     const stdout = this.field.engine.getStdout();
                     const output = this.recordOutputText(stdout);
-                    let stateText;
+                    let stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
                     if (this.field.engine.getIsWaitingForStdin()) {
                         stateText = "scanf";
                     } else if (!this.field.engine.isStepExecutionRunning()) {
                         stateText = "EOF";
                         this.isExecuting = false;
-                    } else {
-                        stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
                     }
                     const ret = {
                         "stackData": stackData,
