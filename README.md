@@ -29,4 +29,4 @@ Demo page is here.
 npm run build
 ```
 
-to update js/index.js by webpack.
+to update `js/index.js` by webpack.
