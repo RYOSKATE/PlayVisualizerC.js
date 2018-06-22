@@ -1,6 +1,19 @@
 # JPlayVisualizerC  <a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
 
-## Usage
+## For User
+
+### Online
+
+Demo page is here.
+
+[https://ryoskate.github.io/JPlayVisualizerC/](https://ryoskate.github.io/JPlayVisualizerC/)
+
+### Offline
+
+1. Download this repository.
+1. Open `docs/index.html` by a modern browser.
+
+## For Developer
 
 ### Setup environment
 
@@ -10,14 +23,10 @@
  npm install
  ```
 
-* After editin files in docs/js,
+* After editing files in `src/`, 
 
 ```
  npm run build
 ```
-to update bundle.js for browser by webpack.
 
-* Open the index.html on your browser
-
-### demo page:
-[https://ryoskate.github.io/JPlayVisualizerC/](https://ryoskate.github.io/JPlayVisualizerC/)
+to update js/index.js by webpack.
