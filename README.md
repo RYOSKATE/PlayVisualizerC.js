@@ -26,7 +26,7 @@ Demo page is here.
 * After editing files in `src/`, 
 
 ```
- npm run build
+npm run build
 ```
 
 to update js/index.js by webpack.
