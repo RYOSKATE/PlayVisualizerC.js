@@ -1,4 +1,4 @@
-# JPlayVisualizerC  <a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
+# PlayVisualizerC.jp  <a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
 
 ## For User
 
@@ -6,7 +6,7 @@
 
 Demo page is here.
 
-[https://ryoskate.github.io/JPlayVisualizerC/](https://ryoskate.github.io/JPlayVisualizerC/)
+[https://ryoskate.github.io/JPlayVisualizerC/](https://ryoskate.github.io/PlayVisualizerC.jp/)
 
 ### Offline
 
