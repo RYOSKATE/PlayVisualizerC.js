@@ -1,5 +1,5 @@
 {
-  "name": "jplayvisualizerc",
+  "name": "playvisualizerc.js",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RYOSKATE/JPlayVisualizerC.git"
+    "url": "git+https://github.com/RYOSKATE/playvisualizerc.js.git"
   },
   "author": "RYOSKATE",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/RYOSKATE/JPlayVisualizerC/issues"
+    "url": "https://github.com/RYOSKATE/playvisualizerc.js/issues"
   },
-  "homepage": "https://github.com/RYOSKATE/JPlayVisualizerC#readme",
+  "homepage": "https://github.com/RYOSKATE/playvisualizerc.js#readme",
   "devDependencies": {
     "ace-min-noconflict": "^1.1.9",
     "babel-core": "^6.26.3",
