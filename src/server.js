@@ -1,6 +1,6 @@
 // const fs = require('fs');
 const unicoen = require('./unicoen').default;
-
+import { ResetAllFileList } from './file';
 class Field {
     constructor() {
         this.count = 0;
@@ -18,6 +18,34 @@ class Server {
         this.field = new Field();
         this.tmpDirName = 'pvc-tmp';
         this.isExecuting = false;
+        this.files = new Map();
+    }
+    addFile(file) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            this.files.set(file.name, reader.result);
+            ResetAllFileList(this.getFileNames());
+        }.bind(this);
+        reader.readAsArrayBuffer(file);
+    }
+    addFiles(files) {
+        for (let i = 0; i < files.length; ++i) {
+            this.addFile(files[i]);
+        }
+        return this.getFileNames();
+    }
+
+    deleteFile(filename) {
+        this.files.delete(filename);
+        return this.getFileNames();
+    }
+
+    getFileNames() {
+        const names = new Array();
+        for (const file of this.files.keys()) {
+            names.push(file);
+        }
+        return names;
     }
 
     isFieldExist() {
@@ -72,54 +100,35 @@ class Server {
     //     }
     // }
 
-    // public upload = Action(parse.multipartFormData) {
-    // request =>
-    //     const uuid = getUUIDfromSession(request.session);
-    //     // tmpにディレクトリ作成
-    //     const dirp = Paths.get("/tmp", uuid)//Path;
-    //     if (Files.notExists(dirp)) Files.createDirectories(dirp) // mkdir -p
-    //     const currentDir = new JFile(".").getAbsoluteFile().getParent();
-    //     request.body.file("files").map {
-    //         file =>
-    //         const filename = file.filename;
-    //             file.ref.moveTo(new JFile(dirp.toString, filename), replace = true)//replace:true
-    //         }
-    //         const dirpStr = dirp.toString;
-    //         const dirList = getListOfPaths(dirpStr);
-    //         const filenamesStr = dirList.map{ _.getName };
-    //         // List[JFile]なのでJFileをStringに変えたList[String]にmapして作る
-    //         //各Stringの親ディレクトリ部分を削除
-    //         //
+    upload(files) {
+        const filenames = this.addFiles(files);
+        const json = {
+            //"uuid" -> uuid,
+            //"currentDir" -> currentDir,
+            //"dirp" -> dirp.toString,
+            //"num" -> request.body.file("files").size,
+            "filenames": filenames
+        };
+        return json;
+    }
 
-    //         const json = Json.obj(;
-    //         //"uuid" -> uuid,
-    //         //"currentDir" -> currentDir,
-    //         //"dirp" -> dirp.toString,
-    //         //"num" -> request.body.file("files").size,
-    //         "filenames" -> filenamesStr
-    // )
-    //         Ok(Json.stringify(json)).withSession("uuid" -> uuid)
-    //     }
+    delete(filename) {
+        const filenames = this.deleteFile(filename);
+        const json = {
+            //"uuid" -> uuid,
+            //"currentDir" -> currentDir,
+            //"dirp" -> dirp.toString,
+            //"num" -> request.body.file("files").size,
+            "filenames": filenames
+        };
+        return json;
+    }
 
-    //         public delete (filename : String)  = Action {
-    //         implicit request =>
-    //     const uuid = getUUIDfromSession(request.session);
-    //             const dir = Paths.get("/tmp", uuid);
-    //             const file = new JFile(dir.toString, filename);
-    //             file.delete()
-    //             const json = Json.obj(;
-    //             "filenames" -> getUserDirFilesStr(uuid)
-    // )
-    //             Ok(Json.stringify(json)).withSession("uuid" -> uuid)
-    //         }
-
-    //             public download(filename : String) = Action {
-    //             implicit request =>
-    //     const uuid = getUUIDfromSession(request.session);
-    //                 const dir = Paths.get("/tmp", uuid);
-    //                 const file = new JFile(dir.toString, filename);
-    //                 Ok.sendFile(content = file, inline = false)
-    //             }
+    // download(filename) {
+    //     const dir = Paths.get("/tmp", uuid);
+    //     const file = new JFile(dir.toString, filename);
+    //     Ok.sendFile(content = file, inline = false);
+    // }
 
     ajaxCall(obj) {
         const stackData = obj["stackData"];
@@ -153,6 +162,8 @@ class Server {
                 let ret;
                 do {
                     ret = this.ajaxCall(json);
+                    if (ret == null || ret == undefined)
+                        break;
                 } while (ret.debugState != "EOF" || ret.debugState != "scanf");
                 return ret;
             }
@@ -169,6 +180,7 @@ class Server {
                 return ret;
             }
             case "step": {
+                this.field.engine.setFileList(this.files);
                 this.field.count += 1
                 if (this.field.count < this.field.stateHistory.length - 1) {
                     const stackData = this.field.stateHistory[this.field.count];

@@ -1,52 +1,46 @@
 import { dispLoading, removeLoading } from './window';
-
-const file_upload = () => {
-    // フォームデータを取得
-    var form = $('#my-form');
-    var formdata = new FormData(form[0]);
-    dispLoading("送信中...");
-    // POSTでアップロード
-    $.ajax({
-        url: "/upload",
-        type: "POST",
-        data: formdata,
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType: "html",
-        success: function (data) {
-            var jsondata = JSON.parse(data);
-            ResetAllFileList(jsondata.filenames)
-            //alert(jsondata.filenames);
-        },
-        error: function (data) {
-            alert("invalid data");
-        },
-        complete: function (data) {
-            // Loadingイメージを消す
-            removeLoading();
-        }
-    });
+import server from './server';
+export const file_upload = (evt) => {
+    dispLoading("Adding files...");
+    setTimeout(() => {
+        // フォームデータを取得
+        new Promise((resolve, reject) => {
+            const files = evt.target.files; // FileList object
+            const ret = server.upload(files);
+            if (ret != null) {
+                resolve(ret);
+            } else {
+                reject();
+            }
+        }).then((ret) => {
+            ResetAllFileList(ret.filenames);
+        }).catch(() => {
+            alert("Failed to add");
+        }).finally(() => {
+            $("#files").val("");
+        });
+    }, 100);
 }
 
-const deleteFile = (filename) => {
-    var url = "/delete/" + filename;
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'text/json',
-        success: function (data) {
-            ResetAllFileList(data.filenames)
-        },
-        error: function (data) {
-            alert("Fail to delete");
-        },
-        complete: function (data) {
-            // Loadingイメージを消す
-            removeLoading();
-        }
-    });
+export const deleteFile = (filename) => {
+    dispLoading("Removing the file...");
+    setTimeout(() => {
+        // フォームデータを取得
+        new Promise((resolve, reject) => {
+            const ret = server.delete(filename);
+            if (ret != null) {
+                resolve(ret);
+            } else {
+                reject();
+            }
+        }).then((ret) => {
+            ResetAllFileList(ret.filenames);
+        }).catch(() => {
+            alert("Failed to delete");
+        }).finally(() => {
+            $("#files").val("");
+        });
+    }, 100);
 }
 
 const jsonStrFormat = (jsonStr) => {
@@ -60,7 +54,7 @@ const jsonStrFormat = (jsonStr) => {
         .replace(/\\f/g, "\\f");
 }
 
-const setFileListFromJson = (jsonText) => {
+export const setFileListFromJson = (jsonText) => {
     const jsonFromIndexStr = jsonText;// @Html(Json.stringify(Json.toJson(jsonStrFromIndex)));
     const fomattedJsonFromIndexStr = jsonStrFormat(jsonFromIndexStr);
     const jsonFromIndex = JSON.parse(fomattedJsonFromIndexStr);
@@ -71,7 +65,7 @@ const setFileListFromJson = (jsonText) => {
 }
 
 
-const ResetAllFileList = (filelist) => {　　　　//全て削除して再セット
+export const ResetAllFileList = (filelist) => {　　　　//全て削除して再セット
     var parElm = document.getElementById('filelist');
     var list = parElm.getElementsByTagName('li');
     for (var i = list.length - 1; i >= 0; --i) {　　//末尾から順にすべて削除
@@ -97,11 +91,12 @@ const ResetAllFileList = (filelist) => {　　　　//全て削除して再セ�
         item.appendChild(whiteSpaceElement);
 
         var aTagElement = document.createElement("a");
-        aTagElement.href = "/download/" + filename;
+        // aTagElement.href = "/download/" + filename;
         aTagElement.appendChild(document.createTextNode(filename));
 
         item.appendChild(aTagElement);
 
         parElm.appendChild(item);//sample_container要素に追加
     }
+    removeLoading();
 }

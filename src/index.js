@@ -1,4 +1,5 @@
 import { createConsoleEditor, createEditor } from './editor';
+import { file_upload } from './file';
 
 const editor = createEditor('editorMain', true, "");
 const consolEditor = createConsoleEditor("output", "", editor);
@@ -50,3 +51,5 @@ window.addEventListener("load", () => {
     }, wait);
   }, false);
 }, false);
+
+document.getElementById('files').addEventListener('change', file_upload, false);

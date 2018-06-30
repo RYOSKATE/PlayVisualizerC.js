@@ -119,8 +119,7 @@
                                         <li>アップロードされたファイルはここにファイルパスが表示されます。</li>
                                     </ul>
                                     <!-- @helper.form(action = routes.VisualizerController.upload, 'enctype -> "multipart/form-data", 'id -> "my-form") { -->
-                                    <input type="file" name="files">
-                                    <button type="button" onclick="file_upload()">Submit</button>
+                                    <input type="file" id="files" name="files[]" multiple />
                                     <!-- } -->
                                 </div>
                             </div>
