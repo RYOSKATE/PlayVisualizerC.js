@@ -164,7 +164,7 @@ class Server {
                     ret = this.ajaxCall(json);
                     if (ret == null || ret == undefined)
                         break;
-                } while (ret.debugState != "EOF" || ret.debugState != "scanf");
+                } while (ret.debugState != "EOF" && ret.debugState != "scanf");
                 return ret;
             }
             case "reset": {
