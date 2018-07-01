@@ -181,7 +181,6 @@ class Server {
                 return ret;
             }
             case "step": {
-                this.field.engine.setFileList(this.files);
                 this.field.count += 1
                 if (this.field.count < this.field.stateHistory.length - 1) {
                     const stackData = this.field.stateHistory[this.field.count];
@@ -212,6 +211,7 @@ class Server {
                     } else if (!this.field.engine.isStepExecutionRunning()) {
                         stateText = "EOF";
                         this.isExecuting = false;
+                        ResetAllFileList(this.files);
                     }
                     const ret = {
                         "stackData": stackData,
@@ -266,6 +266,7 @@ class Server {
 
     resetEngine() {
         this.field = new Field();
+        this.field.engine.setFileList(this.files);
         // this.field.engine.setFileDir(this.getUserDir());
         // this.field.engine.out = new PrintStream(this.field.baos);
         return this.field;
