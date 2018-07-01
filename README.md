@@ -6,7 +6,7 @@
 
 Demo page is here.
 
-[https://ryoskate.github.io/JPlayVisualizerC/](https://ryoskate.github.io/PlayVisualizerC.jp/)
+[https://ryoskate.github.io/PlayVisualizerC.js](https://ryoskate.github.io/PlayVisualizerC.js)
 
 ### Offline
 
