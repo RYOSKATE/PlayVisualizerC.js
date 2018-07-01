@@ -1,7 +1,20 @@
 import { createConsoleEditor, createEditor } from './editor';
 import { file_upload } from './file';
 
-const editor = createEditor('editorMain', true, "");
+const defaultSourceCode = String.raw`#include <stdio.h>
+int main()
+{
+    printf("Hello, PVC.js!\n");
+    
+    int a = 2;
+    int b = 3;
+    int c = a + b;
+    
+    printf("a + b = %d\n", c);
+    
+    return 0;
+}`;
+const editor = createEditor('editorMain', true, defaultSourceCode);
 const consolEditor = createConsoleEditor("output", "", editor);
 
 $(document).on('click', '.popup_btn', function () {
