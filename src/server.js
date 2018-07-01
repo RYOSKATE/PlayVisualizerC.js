@@ -24,7 +24,7 @@ class Server {
         var reader = new FileReader();
         reader.onload = function () {
             this.files.set(file.name, reader.result);
-            ResetAllFileList(this.getFileNames());
+            ResetAllFileList(this.files);
         }.bind(this);
         reader.readAsArrayBuffer(file);
     }
@@ -32,12 +32,13 @@ class Server {
         for (let i = 0; i < files.length; ++i) {
             this.addFile(files[i]);
         }
-        return this.getFileNames();
+        return this.files;
     }
 
     deleteFile(filename) {
         this.files.delete(filename);
-        return this.getFileNames();
+        ResetAllFileList(this.files);
+        return this.files;
     }
 
     getFileNames() {
