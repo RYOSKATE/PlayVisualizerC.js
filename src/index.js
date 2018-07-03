@@ -1,6 +1,8 @@
 import { createConsoleEditor, createEditor } from './editor';
 import { file_upload } from './file';
+import showLanguage from './language';
 
+// エディタを初期化
 const defaultSourceCode = String.raw`#include <stdio.h>
 int main()
 {
@@ -17,6 +19,10 @@ int main()
 const editor = createEditor('editorMain', true, defaultSourceCode);
 const consolEditor = createConsoleEditor("output", "", editor);
 
+// ファイルアップロード時の処理
+document.getElementById('files').addEventListener('change', file_upload, false);
+
+// 説明表示ボタン
 $(document).on('click', '.popup_btn', function () {
   // ポップアップの幅と高さからmarginを計算する
   const mT = ($('#popup1').outerHeight() / 2) * (-1) + 'px';
@@ -35,6 +41,7 @@ $(document).on('click', '.popup_btn', function () {
   return false;
 });
 
+// キャンバスの設定
 window.addEventListener("load", () => {
   const container = document.getElementById("canvasContainer");
   const canvas1 = document.getElementById("display");
@@ -65,4 +72,16 @@ window.addEventListener("load", () => {
   }, false);
 }, false);
 
-document.getElementById('files').addEventListener('change', file_upload, false);
+// 日本語と英語の切り替え
+$('#language-swicher').toggles({
+  text: { on: '日本語', off: 'English' },
+});
+$('#language-swicher').on('toggle', (e, active) => {
+  if (active) {
+    showLanguage('jp');  // 日本語を表示 詳細後述
+  } else {
+    showLanguage('en');  // 英語を表示
+  }
+});
+
+showLanguage('en');  // デフォルトの言語
