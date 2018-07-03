@@ -23,121 +23,134 @@
     <div class="container-fluid fluid2" style="margin:10px; ">
         <div class="row">
             <div class="col-lg-4 col-md-5 col-sm-6 col-xs-12">
+                <!--左側 -->
                 <div class="row">
-                    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                    <div id="menu" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <!--言語と使い方とコントローラ -->
                         <div class="row">
-                            <div class="col-lg-12 col-md-3 col-sm-3 col-xs-3">
-                                <div id="language-swicher" class="toggle-light"></div>
-                            </div>
-                            <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
-                                <a href="#popup1" class="popup_btn">How to use</a>
-                                <div id="popup1" class="popup">
-                                    <div class="popup_inner">
-                                        <h4>How to use</h4>
-                                        <p>下のエディタにプログラムを書き、上のボタンを押すことで可視化実行ができます。</p>
-                                        <p>(マウスカーソルを重ねるとで各ボタンの説明が表示されます。)</p>
-                                        <p>実験前にデフォルトで表示されているプログラムをステップ実行して、</p>
-                                        <p>どう可視化されるか確認してみてください。</p>
-                                        <p>十分に確認できたらページ下部のボタンでトップページに戻れます。</p>
-                                        <p>実験1,2,3,4を順に実施してください。</p>
-                                        <p>もしExecution exceptionと書いてある真っ赤な画面になったらごめんなさい。</p>
-                                        <p>ツールのバグです。ブラウザの戻るボタンを押してください。</p>
-
-                                        <div>
-                                            <a href="#close_btn" class="close_btn">閉じる</a>
+                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                <!--言語と使い方 -->
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-3 col-sm-3 col-xs-3">
+                                        <div id="language-swicher" class="toggle-light"></div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
+                                        <a href="#popup1" class="popup_btn jp">使い方</a>
+                                        <a href="#popup1" class="popup_btn en">How to use</a>
+                                        <div id="popup1" class="popup">
+                                            <div class="popup_inner jp">
+                                                <h4>使い方</h4>
+                                                <p>下のエディタにプログラムを書き、上のボタンを押すことで可視化実行ができます。</p>
+                                                <p>(マウスカーソルを重ねるとで各ボタンの説明が表示されます。)</p>
+                                                <p>実験前にデフォルトで表示されているプログラムをステップ実行して、</p>
+                                                <p>どう可視化されるか確認してみてください。</p>
+                                                <p>十分に確認できたらページ下部のボタンでトップページに戻れます。</p>
+                                                <p>実験1,2,3,4を順に実施してください。</p>
+                                                <p>もしExecution exceptionと書いてある真っ赤な画面になったらごめんなさい。</p>
+                                                <p>ツールのバグです。ブラウザの戻るボタンを押してください。</p>
+                                                <div>
+                                                    <a href="#close_btn" class="close_btn">閉じる</a>
+                                                </div>
+                                            </div>
+                                            <div class="popup_inner en">
+                                                <h4> How to use </h4>
+                                                <p> PVC.js has five GUI components: (1) editor, (2) execution controller buttons,
+                                                    (3) I/O window, (4) canvas for visualization, and (5) file upload form.
+                                                </p>
+                                                <p>Users can write source code in the editor. Clicking on the execution control
+                                                    buttons initiates the step execution. The I/O window shows the content
+                                                    of the standard output written by the program (e.g., printf) and accepts
+                                                    standard input (e.g., scanf). Canvas shows the program's execution status
+                                                    using tables and figures.</p>
+                                                <p>PVC.js adaptively changes its layout to correspond with the size of the browser
+                                                    window.
+                                                </p>
+                                                <div>
+                                                    <a href="#close_btn" class="close_btn">Close</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                        <div id="overlay"></div>
-                        <div class="btn-group">
-                            <div class="btn-group">
-                                <button title="エディタのフォントサイズ変更" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" id="font-size">
-                                    <li>
-                                        <a href="#" data-size="10">小さい</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" data-size="12">普通</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" data-size="14">大きい</a>
-                                    </li>
-                                </ul>
+                            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                <!--コントローラボタン -->
+                                <div id="overlay"></div>
+                                <div class="btn-group">
+                                    <div class="btn-group">
+                                        <button title="エディタのフォントサイズ変更" id="font-size-btn" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" id="font-size">
+                                            <li>
+                                                <a href="#" data-size="10" class="jp">小さい</a>
+                                                <a href="#" data-size="10" class="en">Small</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" data-size="12" class="jp">普通</a>
+                                                <a href="#" data-size="12" class="en">Normal</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" data-size="14" class="jp">大きい</a>
+                                                <a href="#" data-size="14" class="en">Large</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button id="debug" title="可視化デバッグ実行開始(最初に1回必ず押す)" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-play"></i>
+                                    </button>
+                                    <!-- コンパイル済みならデバッグ開始-->
+                                    <button id="stop" title="可視化デバッグ終了" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-stop"></i>
+                                    </button>
+                                    <!-- デバッグ中なら停止-->
+                                    <button id="reset" title="実行中のプログラムを最初に戻す" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-backward"></i>
+                                    </button>
+                                    <!-- コンパイル済みならデバッグ開始-->
+                                    <button id="back" title="前の式に戻る" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-arrow-left"></i>
+                                    </button>
+                                    <!-- デバッグ開始済みなら1ステップ戻る-->
+                                    <button id="step" title="次の式を実行する(次に実行する式をハイライト)" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-arrow-right"></i>
+                                    </button>
+                                    <!-- デバッグ開始済みなら1ステップ進む-->
+                                    <button id="exec" title="実行中のプログラムを最後まで実行する" class="btn btn-default">
+                                        <i class="glyphicon glyphicon-forward"></i>
+                                    </button>
+                                    <!-- コンパイル済みなら実行-->
+                                </div>
                             </div>
-                            <!-- 
-                        <button id="bold" class="btn btn-default">
-                            <i class="glyphicon glyphicon-bold"></i>
-                        </button>-->
-                            <!-- 
-                        <button id="save" class="btn btn-default">
-                            <i class="glyphicon glyphicon-floppy-save"></i>
-                        </button>-->
-                            <!-- 
-                        <button id="load" class="btn btn-default">
-                            <i class="glyphicon glyphicon-folder-open"></i>
-                        </button>-->
-                            <button id="debug" title="可視化デバッグ実行開始(最初に1回必ず押す)" class="btn btn-default">
-                                <i class="glyphicon glyphicon-play"></i>
-                            </button>
-                            <!-- コンパイル済みならデバッグ開始-->
-                            <button id="stop" title="可視化デバッグ終了" class="btn btn-default">
-                                <i class="glyphicon glyphicon-stop"></i>
-                            </button>
-                            <!-- デバッグ中なら停止-->
-                            <button id="reset" title="実行中のプログラムを最初に戻す" class="btn btn-default">
-                                <i class="glyphicon glyphicon-backward"></i>
-                            </button>
-                            <!-- コンパイル済みならデバッグ開始-->
-                            <button id="back" title="前の式に戻る" class="btn btn-default">
-                                <i class="glyphicon glyphicon-arrow-left"></i>
-                            </button>
-                            <!-- デバッグ開始済みなら1ステップ戻る-->
-                            <button id="step" title="次の式を実行する(次に実行する式をハイライト)" class="btn btn-default">
-                                <i class="glyphicon glyphicon-arrow-right"></i>
-                            </button>
-                            <!-- デバッグ開始済みなら1ステップ進む-->
-                            <button id="exec" title="実行中のプログラムを最後まで実行する" class="btn btn-default">
-                                <i class="glyphicon glyphicon-forward"></i>
-                            </button>
-                            <!-- コンパイル済みなら実行-->
-
+                            <div id="debugStatus" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">DebugStatus:</div>
                         </div>
                     </div>
-                    <div id="debugStatus">DebugStatus:</div>
-                    <!-- <br>
-                    <button id="exstart">実験開始</button>
-                    <button id="exans">答えを確認</button>
-                    <br> -->
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div id="editorMain"></div>
                     </div>
-                    <br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div id="output"></div>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
-                    <div role="tablist" aria-multiselectable="true" class="panel-group" id="accordion-1">
-                        <div class="panel panel-default">
-                            <div role="tab" class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion-1" aria-expanded="true" href="#accordion-1 .item-1">File Upload </a>
-                                </h4>
-                            </div>
-                            <div role="tabpanel" class="panel-collapse collapse in item-1">
-                                <div class="panel-body">
-                                    <ul id="filelist">
-                                        <li>アップロードされたファイルはここにファイルパスが表示されます。</li>
-                                    </ul>
-                                    <!-- @helper.form(action = routes.VisualizerController.upload, 'enctype -> "multipart/form-data", 'id -> "my-form") { -->
-                                    <input type="file" id="files" name="files[]" multiple />
-                                    <!-- } -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div id="file-form" role="tablist" aria-multiselectable="true" class="panel-group" id="accordion-1">
+                            <div class="panel panel-default">
+                                <div role="tab" class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion-1" aria-expanded="true" href="#accordion-1 .item-1">File Upload </a>
+                                    </h4>
+                                </div>
+                                <div role="tabpanel" class="panel-collapse collapse in item-1">
+                                    <div class="panel-body">
+                                        <ul id="filelist">
+                                            <li class="jp">アップロードされたファイルはここに表示されます。</li>
+                                            <li class="en">The uploaded file will be displayed here.</li>
+                                        </ul>
+                                        <!-- @helper.form(action = routes.VisualizerController.upload, 'enctype -> "multipart/form-data", 'id -> "my-form") { -->
+                                        <input type="file" id="files" name="files[]" multiple />
+                                        <!-- } -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,19 +160,6 @@
             <div id="canvasContainer" class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
                 <canvas id="display"></canvas>
             </div>
-
-            <!-- 
-                <div class="col-lg-12 col-md-12">-->
-            <!-- 処理の流れ
-                    <br>-->
-            <!-- 実行ボタン：JavaScriptでイベント取得。エディタ上のテキストを取得。Fromの形でPOST(JavaScript)
-                    <br>-->
-            <!-- コントローラはポストされたデータを取得。アクション関数で文字列の処理など。(Scala,String)ビューにセット。
-                    <br>-->
-            <!-- ビュー：生文字を取得(改行文字に注意)。JavaScriptでコメント文字など操作してセット。
-                    <br>-->
-            <!-- 
-                </div>-->
         </div>
     </div>
     <br>

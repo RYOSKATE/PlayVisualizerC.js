@@ -54,10 +54,10 @@ window.addEventListener("load", () => {
     canvas1.width = 0.97 * container.offsetWidth;
     canvas1.height = 0.95 * window.innerHeight;
 
-    const height = $(window).height() - 180;
-    $("#editorMain").css("height", 0.8 * Math.max(height, 500) + "px");
-    $("#output").css("height", 0.22 * Math.max(height, 500) + "px");
-    editor.resize()
+    // const height = $(window).height() - 180;
+    // $("#editorMain").css("height", 0.8 * Math.max(height, 500) + "px");
+    // $("#output").css("height", 0.22 * Math.max(height, 500) + "px");
+    // editor.resize()
   }
 
   // ページ読込時にCanvasサイズ設定

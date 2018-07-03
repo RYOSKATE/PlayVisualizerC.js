@@ -1,12 +1,24 @@
-﻿.popup_btn {
-    margin: 5px
+﻿.jp {
+    display: none;
 }
+
+.popup_btn {
+    margin: 5px;
+}
+#menu {
+    height: 8vh;
+}
+
 #editorMain {
-    height: 80%
+    height: 53vh;
 }
 
 #output {
-    height: 22%
+    height: 18vh;
+}
+
+#file-form {
+    height: 15vh;
 }
 
 #display {
