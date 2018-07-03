@@ -23,7 +23,7 @@
     "ace-min-noconflict": "^1.1.9",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
     "cache-loader": "^1.2.2",
     "eslint": "^4.19.1",
     "fs": "0.0.1-security",
