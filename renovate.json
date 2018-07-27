@@ -1,5 +1,21 @@
 {
-  "extends": [
-    "config:base"
-  ]
+  "extends": ["config:base"],
+  "rebaseStalePrs": true,
+  "prCreation": "not-pending",
+  "dependencies": {
+    "automerge": false,
+    "major": {
+      "automerge": false
+    },
+    "minor": {
+      "automerge": false
+    }
+  },
+  "devDependencies": {
+    "automerge": true,
+    "major": {
+      "automerge": false
+    }
+  },
+  "automergeType": "branch-push"
 }
