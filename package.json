@@ -26,7 +26,7 @@
     "babel-preset-env": "^1.7.0",
     "cache-loader": "^1.2.2",
     "eslint": "^4.19.1",
-    "fs": "0.0.1-security",
+    "fs": "0.0.2",
     "path": "^0.12.7",
     "source-map-loader": "^0.2.3",
     "thread-loader": "^1.1.5",
