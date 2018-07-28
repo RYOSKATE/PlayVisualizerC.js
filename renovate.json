@@ -17,5 +17,8 @@
       "automerge": false
     }
   },
-  "automergeType": "branch-push"
+  "automergeType": "branch-push",
+  "minor": {
+    "groupName": "all dependencies"
+  }
 }
