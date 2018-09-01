@@ -20,10 +20,10 @@
   },
   "homepage": "https://github.com/RYOSKATE/playvisualizerc.js#readme",
   "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "ace-min-noconflict": "1.1.9",
-    "babel-core": "6.26.3",
-    "babel-loader": "7.1.5",
-    "babel-preset-env": "1.7.0",
+    "babel-loader": "^8.0.0",
     "cache-loader": "1.2.2",
     "eslint": "5.5.0",
     "fs": "0.0.2",
