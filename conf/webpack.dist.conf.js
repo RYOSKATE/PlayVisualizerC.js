@@ -17,6 +17,12 @@ module.exports = {
         enforce: 'pre'
       },
       {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        enforce: 'pre'
+      },
+      {
         test: /\.ts$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
