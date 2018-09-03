@@ -1,5 +1,4 @@
-// const fs = require('fs');
-const unicoen = require('./unicoen').default;
+import unicoen from './unicoen/unicoen';
 import { ResetAllFileList } from './file';
 class Field {
     constructor() {

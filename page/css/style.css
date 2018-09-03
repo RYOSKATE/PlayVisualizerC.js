@@ -1,0 +1,28 @@
+.jp {
+    display: none;
+}
+
+.popup_btn {
+    margin: 5px;
+}
+#menu {
+    height: 14vh;
+}
+
+#editorMain {
+    height: 53vh;
+}
+
+#output {
+    height: 18vh;
+}
+
+#file-form {
+    height: 15vh;
+}
+
+#display {
+    width: 100%;
+    height: 95vh;
+    border: 1px black solid;
+}
