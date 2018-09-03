@@ -1,4 +1,3 @@
-import { assert } from 'chai';
 import Scope from './Scope';
 import UniExpr from '../node/UniExpr';
 import UniMethodCall from '../node/UniMethodCall';
@@ -414,7 +413,7 @@ export default class Engine {
 
   // tslint:disable-next-line:function-name
   private * _execExpr(expr: UniExpr, scope: Scope): any {
-    assert.ok(expr != null);
+    console.assert(expr != null);
     if (expr instanceof UniStatement) {
       return yield* this.execStatement(expr, scope);
     } else if (expr instanceof UniDecralation) {
@@ -519,7 +518,7 @@ export default class Engine {
     // 実引数を仮引数に代入
     const params: UniParam[] = fdec.params;
     if (params != null && args != null) {
-      assert.ok(params.length === args.length);
+      console.assert(params.length === args.length);
       for (let i = 0; i < args.length; ++i) {
         const param: UniParam = params[i];
         const arg: UniExpr = args[i];

@@ -7,7 +7,7 @@ const FailPlugin = require('webpack-fail-plugin');
 
 module.exports = {
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.ts$/,
         exclude: /node_modules/,
