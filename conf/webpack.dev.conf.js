@@ -8,6 +8,16 @@ const FailPlugin = require('webpack-fail-plugin');
 const rules = require('./webpack.rules');
 
 module.exports = {
+  entry: [
+    'webpack/hot/dev-server',
+    'webpack-hot-middleware/client?quiet=true',
+    `./${conf.path.src('index')}`
+  ],
+  output: {
+    path: path.join(process.cwd(), conf.paths.tmp),
+    filename: 'index.js'
+  },
+  mode: 'development',
   module: {
     rules
   },
@@ -32,13 +42,8 @@ module.exports = {
       debug: true
     })
   ],
-  devtool: 'source-map',
   node: {
     fs: "empty"
-  },
-  output: {
-    path: path.join(process.cwd(), conf.paths.tmp),
-    filename: 'index.js'
   },
   resolve: {
     extensions: [
@@ -52,9 +57,5 @@ module.exports = {
       gen: path.resolve(__dirname, '../generated'),
     }
   },
-  entry: [
-    'webpack/hot/dev-server',
-    'webpack-hot-middleware/client?quiet=true',
-    `./${conf.path.src('index')}`
-  ]
+  devtool: 'source-map'
 };

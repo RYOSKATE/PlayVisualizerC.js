@@ -4,12 +4,36 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FailPlugin = require('webpack-fail-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const rules = require('./webpack.rules');
 
 module.exports = {
+  entry: [
+    `./${conf.path.src('index')}`
+  ],
+  output: {
+    path: path.join(process.cwd(), conf.paths.dist),
+    filename: 'index.js'
+  },
+  mode: 'production',
   module: {
     rules
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJSPlugin({
+        uglifyOptions: {
+          output: { comments: false },
+          compress: {
+            unused: true,
+            dead_code: true,
+            warnings: false,
+            drop_console: true
+          } // eslint-disable-line camelcase
+        },
+      }),
+    ],
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -17,13 +41,6 @@ module.exports = {
     FailPlugin,
     new HtmlWebpackPlugin({
       template: conf.path.page('index.html')
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"'
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      output: { comments: false },
-      compress: { unused: true, dead_code: true, warnings: false } // eslint-disable-line camelcase
     }),
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -37,10 +54,6 @@ module.exports = {
       }
     })
   ],
-  output: {
-    path: path.join(process.cwd(), conf.paths.dist),
-    filename: 'index.js'
-  },
   node: {
     fs: "empty"
   },
@@ -55,8 +68,5 @@ module.exports = {
       src: path.resolve(__dirname, '../src'),
       generated: path.resolve(__dirname, '../generated'),
     }
-  },
-  entry: [
-    `./${conf.path.src('index')}`
-  ]
+  }
 };
