@@ -1,16 +1,10 @@
-.antlr/
-gen/
-compiled/
+.cache-loader/
 .idea/
 .tmp/
-coverage/
-docs/
-test/results
-defs/**/*.js
-dist/
-out/
+.vscode/
+gen/
+
 .DS_Store
-.vscode
 
 # Logs
 logs
@@ -73,4 +67,3 @@ typings/
 
 # next.js build output
 .next
-.cache-loader/
