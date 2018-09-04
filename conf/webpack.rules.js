@@ -13,6 +13,13 @@ const babelLoader = {
     }
 };
 
+const tsLoader = {
+    loader: 'ts-loader',
+    options: {
+        happyPackMode: true
+    }
+};
+
 module.exports = [
     {
         test: /\.ts$/,
@@ -21,12 +28,7 @@ module.exports = [
             'cache-loader',
             threadLoader,
             babelLoader,
-            {
-                loader: 'ts-loader',
-                options: {
-                    happyPackMode: true
-                }
-            }
+            tsLoader
         ]
     },
     {

@@ -6,7 +6,7 @@ PVC can be used with most modern browsers.
 
 Our build targets are as follows:
 
-[>0.25%, not ie 11, not op_mini all (Browserslist)](http://browserl.ist/?q=%3E0.25%25%2C+not+ie+11%2C+not+op_mini+all)
+[>0.25%, not ie 11, not edge >0, not op_mini all (Browserslist)](http://browserl.ist/?q=%3E0.25%25%2Cnot+ie+11%2Cnot+edge+%3E0%2Cnot+op_mini+all)
 
 ### Online
 

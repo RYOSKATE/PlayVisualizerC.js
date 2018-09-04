@@ -59,6 +59,6 @@ module.exports = {
     }
   },
   entry: [
-    `./${conf.path.page('index')}`
+    `./${conf.path.src('index')}`
   ]
 };

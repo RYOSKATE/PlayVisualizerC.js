@@ -55,6 +55,6 @@ module.exports = {
   entry: [
     'webpack/hot/dev-server',
     'webpack-hot-middleware/client?quiet=true',
-    `./${conf.path.page('index')}`
+    `./${conf.path.src('index')}`
   ]
 };
