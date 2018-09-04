@@ -12,12 +12,12 @@ export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
     outputEditor.setTheme("ace/theme/terminal");
     const id = '#' + idName
     $(id).on('keydown', function (e) {
-        if (localStorage.isScanf == "true") {
+        if (window.GlobalStorage.isScanf == "true") {
             outputEditor.setReadOnly(false);
         }
     });
     $(id).on('keyup', function (e) {
-        const isDuringScanf = localStorage.isScanf == "true";
+        const isDuringScanf = window.GlobalStorage.isScanf == "true";
         if (!isDuringScanf) {
             outputEditor.setReadOnly(true);
         }
@@ -34,7 +34,7 @@ export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
                 "sourcetext": "",
                 "stdinText": text
             };
-            localStorage.isScanf = "false";
+            window.GlobalStorage.isScanf = "false";
             send(jsondata, sourceCodeEditor);
         }
     });
@@ -83,12 +83,12 @@ export const createEditor = (idName, canWrite, initText) => {
                     "sourcetext": text
                 };
                 send(jsondata, sourceCodeEditor);
-                localStorage.line = 0;
-                localStorage.debug = "true";
+                window.GlobalStorage.line = 0;
+                window.GlobalStorage.debug = "true";
             }
         });
         $('#reset').click(function (e) {
-            if (localStorage.debug == "true") {
+            if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "reset",
@@ -102,7 +102,7 @@ export const createEditor = (idName, canWrite, initText) => {
             }
         });
         $('#exec').click(function (e) {
-            if (localStorage.debug == "true") {
+            if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "exec",
@@ -117,7 +117,7 @@ export const createEditor = (idName, canWrite, initText) => {
         });
 
         $('#step').click(function (e) {
-            if (localStorage.debug == "true") {
+            if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "step",
@@ -131,7 +131,7 @@ export const createEditor = (idName, canWrite, initText) => {
             }
         });
         $('#back').click(function (e) {
-            if (localStorage.debug == "true") {
+            if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "back",
@@ -146,7 +146,7 @@ export const createEditor = (idName, canWrite, initText) => {
 
         });
         $('#stop').click(function (e) {
-            if (localStorage.debug == "true") {
+            if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "stop",
@@ -155,8 +155,8 @@ export const createEditor = (idName, canWrite, initText) => {
                 };
                 send(jsondata, sourceCodeEditor);
                 $('canvas').clearCanvas();
-                localStorage.debug = "false";
-                localStorage.line = 0;
+                window.GlobalStorage.debug = "false";
+                window.GlobalStorage.line = 0;
             }
             else {
                 showNotDebuggingMsg();
@@ -174,7 +174,7 @@ const drawVisualizedResult = (jsondata, editor) => {
     const treeObj = treeJson;
     const data = new Array(treeObj);
 
-    if (localStorage.debug != "true") {
+    if (window.GlobalStorage.debug != "true") {
     } else {
         // document.getElementById("exstart").disabled = "true";
         require('ace-min-noconflict');
@@ -210,7 +210,7 @@ const send = (jsondata, editor) => {
         }).then((ret) => {
             document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
             if (ret.debugState == "scanf") {
-                localStorage.isScanf = "true";
+                window.GlobalStorage.isScanf = "true";
             }
             drawVisualizedResult(ret, editor);
         }).catch(() => {

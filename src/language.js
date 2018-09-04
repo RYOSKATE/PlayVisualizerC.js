@@ -1,6 +1,6 @@
 // 言語切り替え
 const showLangage = (lang) => {
-    localStorage.lang = lang;
+    window.GlobalStorage.lang = lang;
 
     // 切り替え対象の locale リスト
     const langSet = ["jp", "en"];

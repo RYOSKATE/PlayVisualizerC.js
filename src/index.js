@@ -2,6 +2,8 @@ import { createConsoleEditor, createEditor } from './editor';
 import { file_upload } from './file';
 import showLanguage from './language';
 
+window.GlobalStorage = {isScanf:'false', line:0,debug:'false', lang:'jp'};
+
 // エディタを初期化
 const defaultSourceCode = String.raw`#include <stdio.h>
 int main()
