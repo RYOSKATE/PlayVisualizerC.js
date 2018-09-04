@@ -3,7 +3,6 @@ const conf = require('./gulp.conf');
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FailPlugin = require('webpack-fail-plugin');
 
 const rules = require('./webpack.rules');
 
@@ -15,7 +14,6 @@ module.exports = {
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
-        FailPlugin,
         new HtmlWebpackPlugin({
             template: conf.path.page('index.html')
         }),
