@@ -1,8 +1,8 @@
 export default class Variable {
 
   public constructor(public readonly type: string, public readonly name: string,
-    private value: any, public readonly address: number,
-    public readonly depth: number) {
+                     private value: any, public readonly address: number,
+                     public readonly depth: number) {
     this.setValue(value);
   }
 
@@ -79,7 +79,7 @@ export default class Variable {
       return vars[size - 1].getByteSize() * size;
     }
     // 処理系依存かもしれないが、リテラルのサイズ、構造体はメンバ変数のsize合計、配列の場合は型*size()などを考慮する必要がある。
-    return 1;// CppEngine.sizeof(this.type);
+    return 1; // CppEngine.sizeof(this.type);
   }
 
   public toString(): string {

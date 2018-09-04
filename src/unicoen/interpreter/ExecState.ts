@@ -10,7 +10,7 @@ export default class ExecState {
   private stacks:Stack[] = [];
   private readonly stackOffset:number = 0x10000;
   private readonly global:Scope = null;
-  
+
   public constructor(global?:Scope) {
     if (global !== undefined) {
       this.global = global;
@@ -26,21 +26,23 @@ export default class ExecState {
     if (!this.hasStack(scope.name)) {
       this.addStack(scope.name);
       if (scope.name === 'GLOBAL') {
-        for (let i = 10000;i < 20000;++i) {
+        for (let i = 10000; i < 20000; ++i) {
           if (scope.typeOnMemory.has(i)) {
             const type:string = scope.typeOnMemory.get(i);
-            if (type === 'FUNCTION')
+            if (type === 'FUNCTION') {
               continue;
+            }
             const value:any = scope.objectOnMemory.get(i);
             const variable = new Variable(type, 'Static:' + i, value, i, scope.depth);
             this.addVariable(scope.name, variable);
           }
         }
-        for (let i = 20000;i < 50000;++i) {
+        for (let i = 20000; i < 50000; ++i) {
           if (scope.typeOnMemory.has(i)) {
             const type:string = scope.typeOnMemory.get(i);
-            if (type === 'FUNCTION')
+            if (type === 'FUNCTION') {
               continue;
+            }
             const value:any = scope.objectOnMemory.get(i);
             const variable = new Variable(type, 'Heap:' + i, value, i, scope.depth);
             this.addVariable(scope.name, variable);
@@ -54,18 +56,21 @@ export default class ExecState {
     }
     for (const varName of varList) {
       const type:string = scope.variableTypes.get(varName);
-      if (type === 'FUNCTION')
+      if (type === 'FUNCTION') {
         continue;
+      }
       let address:number = scope.variableAddress.get(varName);
       let value:any = scope.objectOnMemory.get(address);
-      if (value instanceof UniNode)
+      if (value instanceof UniNode) {
         continue;
-      if (value instanceof Function)
+      }
+      if (value instanceof Function) {
         continue;
+      }
       if (~type.indexOf('[') && ~type.indexOf(']')) {
         const length = Number(type.substring(type.lastIndexOf('[') + 1, type.length - 1));
         const list:any[] = [];
-        for (let i = 0;i < length;++i) {
+        for (let i = 0; i < length; ++i) {
           const arrValue = scope.objectOnMemory.get(<number>value + i);
           list.push(arrValue);
         }
@@ -103,7 +108,7 @@ export default class ExecState {
         if (stack.name === stackName) {
           for (const v of decVar.variables) {
             stack.addVariable(decVar.type, v.name, value, depth);
-          } 
+          }
           break;
         }
       }
@@ -121,7 +126,7 @@ export default class ExecState {
       let lastAddress = lastStack.address;
       lastAddress += lastStack.getByteSize();
       if (this.hasStack(name)) {
-        for (let i = 2;   ;++i) {
+        for (let i = 2;   ; ++i) {
           const indexName:string = name + '.' + i;
           if (!this.hasStack(indexName)) {
             name = indexName;
@@ -129,7 +134,7 @@ export default class ExecState {
           }
         }
       }
-      const stack = new Stack(name,lastAddress);
+      const stack = new Stack(name, lastAddress);
       this.stacks.push(stack);
     }
     return name;

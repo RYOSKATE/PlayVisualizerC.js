@@ -1,6 +1,6 @@
 export default class File
 {
-  private static filelist:Map<string,ArrayBuffer>;
+  private static filelist:Map<string, ArrayBuffer>;
   private pos:number = 0;
   private buf:Uint8Array;
   private toBeFlush:boolean = false;
@@ -10,7 +10,7 @@ export default class File
     this.buf = new Uint8Array(this.data);
   }
 
-  public static setFilelist(filelist:Map<string,ArrayBuffer>) {
+  public static setFilelist(filelist:Map<string, ArrayBuffer>) {
     File.filelist = filelist;
   }
 
@@ -48,7 +48,6 @@ export default class File
     return this.mode.includes('b');
   }
 
-  
   private isWriteMode():boolean {
     return this.mode.includes('w');
   }
@@ -91,9 +90,9 @@ export default class File
       bytes.push(c);
       if (c === '\n'.charCodeAt(0)) {
         break;
-      } 
+      }
     }
-    bytes.push(0);// 終端文字
+    bytes.push(0); // 終端文字
     return bytes;
   }
 }

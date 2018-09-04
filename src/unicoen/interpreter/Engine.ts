@@ -40,7 +40,6 @@ import * as math from 'mathjs';
 import { isArray } from 'util';
 import File from './File';
 
-
 export class ControlException extends RuntimeException {
 }
 
@@ -320,7 +319,7 @@ export default class Engine {
       this.toBool(yield* this.execExpr(uf.cond, forScope));
       yield* this.execExpr(uf.step, forScope)) {
       try {
-        ret = yield* this.execExpr(uf.statement, forScope);// blockなのでgeneratorが返される。
+        ret = yield* this.execExpr(uf.statement, forScope); // blockなのでgeneratorが返される。
       } catch (e) {
         if (e instanceof Continue) {
           continue;

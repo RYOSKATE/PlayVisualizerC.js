@@ -5,38 +5,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FailPlugin = require('webpack-fail-plugin');
 
+const rules = require('./webpack.rules');
+
 module.exports = {
   module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'tslint-loader',
-        enforce: 'pre'
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-        enforce: 'pre'
-      },
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: { compact: false }
-      },
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'ts-loader',
-      },
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: /(node_modules(?!(\/|\\)antlr4ts)|scripts|libs)/,
-      },
-    ]
+    rules
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),

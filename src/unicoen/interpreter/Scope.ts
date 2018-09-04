@@ -3,12 +3,11 @@ import RuntimeException, { UniRuntimeError } from './RuntimeException';
 import UniFunctionDec from '../node/UniFunctionDec';
 import File from './File';
 
-
 enum Type { GLOBAL, OBJECT, LOCAL }
 
 class Address {
   constructor(public codeAddress: number, public staticAddress: number,
-    public heapAddress: number, public stackAddress: number) {
+              public heapAddress: number, public stackAddress: number) {
   }
 }
 
@@ -129,8 +128,9 @@ export default class Scope {
     if (this.objectOnMemory.has(key)) {
       const _var = this.objectOnMemory.get(key);
       if (stackName === this.name || this.type === Type.GLOBAL) {
-        if (key === this.tempAddressForListener)
+        if (key === this.tempAddressForListener) {
           this.objectOnMemory.delete(this.tempAddressForListener);
+        }
         return _var;
       }
     }
@@ -205,7 +205,6 @@ export default class Scope {
     this.typeOnMemory.set(addr[member], type);
     return addr[member]++;
   }
-
 
   public setHeap(value: any, type: string): number {
     return this.setAreaImple(value, type, this.address, 'heapAddress');
@@ -379,8 +378,9 @@ export default class Scope {
   }
 
   public getNextName(funcName: string): string {
-    if (!this.hasName(funcName))
+    if (!this.hasName(funcName)) {
       return funcName;
+    }
     for (let i = 2; ; ++i) {
       const indexName: string = funcName + '.' + i;
       if (!this.hasName(indexName)) {

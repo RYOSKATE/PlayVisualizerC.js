@@ -7,38 +7,11 @@ const FailPlugin = require('webpack-fail-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const pkg = require('../package.json');
 
+const rules = require('./webpack.rules');
+
 module.exports = {
   module: {
-    loaders: [
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'tslint-loader',
-        enforce: 'pre'
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-        enforce: 'pre'
-      },
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: { compact: false }
-      },
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'ts-loader',
-      },
-      {
-        test: /\.js$/,
-        use: 'babel-loader',
-        exclude: /(node_modules(?!(\/|\\)antlr4ts)|scripts|libs)/,
-      },
-    ]
+    rules
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),

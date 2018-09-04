@@ -5,7 +5,7 @@ export default class Stack {
   private variables:Variable[] = [];
 	// 引数(variables)あり版も必要
   public constructor(public readonly name:string,
-                     public readonly address:number) {                       
+                     public readonly address:number) {
   }
 
   addVariable(variable:Variable):void;
@@ -26,7 +26,7 @@ export default class Stack {
       lastAddress = lastVar.address;
       lastAddress += lastVar.getByteSize();
     }
-    const _var:Variable = new Variable(type,name,value,lastAddress,depth);
+    const _var:Variable = new Variable(type, name, value, lastAddress, depth);
     this.variables.push(_var);
   }
 
@@ -34,7 +34,7 @@ export default class Stack {
     for (let i = this.variables.length - 1; 0 <= i; --i) {
       const _var:Variable = this.variables[i]; // 内側のスコープから探すため逆順に探索
       if (_var.hasValue(name)) {
-        _var.setValue(name,value);
+        _var.setValue(name, value);
         break;
       }
     }

@@ -31,37 +31,38 @@ export default class CPP14Engine extends Engine {
       }
       throw new Error('Unsupported type of argument.');
     },            'FUNCTION');
-    
+
   }
-  
+
   protected includeStdio(global:Scope) {
     global.setTop('printf', function () {
-      if (arguments.length < 1)
+      if (arguments.length < 1) {
         return 0;
+      }
       const args = [];
       for (let i = 0; i < arguments.length; ++i) {
         args.push(arguments[i]);
       }
       let text = CPP14Engine.bytesToStr(args[0]);
-      text = text.replace('\\n','\n');
+      text = text.replace('\\n', '\n');
       for (let i = 1; i < args.length; ++i) {
         if (global.typeOnMemory.containsKey(args[i])) {
           const type:string = global.typeOnMemory.get(args[i]);
           if (type.includes('char')) {
-            args[i] = CPP14Engine.charArrToStr(global.objectOnMemory,<number>args[i]);
+            args[i] = CPP14Engine.charArrToStr(global.objectOnMemory, <number>args[i]);
           }
         }
       }
       args[0] = text;
-      const output = agh.sprintf(...args).replace('\\n','\n');
+      const output = agh.sprintf(...args).replace('\\n', '\n');
       this.stdout(output);
-      const byteCount = (str:string) => encodeURIComponent(str).replace(/%../g,'x').length;
+      const byteCount = (str:string) => encodeURIComponent(str).replace(/%../g, 'x').length;
       const count = byteCount(output);
       return count;
     },            'FUNCTION');
 
     global.setTop('scanf', function* () {
-      this.setIsWaitingForStdin(true);// yield and set stdin
+      this.setIsWaitingForStdin(true); // yield and set stdin
       ////////////////////////////////////////////
       const args = yield; // get args from next(args) from execUniMethodCall
       ////////////////////////////////////////////
@@ -105,19 +106,20 @@ export default class CPP14Engine extends Engine {
         const length = Math.min(args.length, values.length);
         for (let i = 0; i < length; ++i) {
           const addr:number = args[i];
-          setValue(addr,values[i]);
+          setValue(addr, values[i]);
         }
         return length;
       } else {
         const addr = args[0];
-        setValue(addr,'' + values);
+        setValue(addr, '' + values);
         return 1;
       }
     },            'FUNCTION');
 
     global.setTop('fopen', function () {
-      if (arguments.length < 1)
+      if (arguments.length < 1) {
         return 0;
+      }
       const args = [];
       for (let i = 0; i < arguments.length; ++i) {
         args.push(arguments[i]);
@@ -130,14 +132,14 @@ export default class CPP14Engine extends Engine {
             // テキスト
           case 'r': {
             const buf = File.getFileFromFileList(filename);
-            const file = new File(filename,buf,mode);
+            const file = new File(filename, buf, mode);
             ret = global.setCode(file, 'FILE');
             break;
           }
           case 'w': {
             const buf = new ArrayBuffer(1024);
             File.addFileToFileList(filename, buf);
-            const file = new File(filename,buf, 'w');
+            const file = new File(filename, buf, 'w');
             ret = global.setCode(file, 'FILE');
             break;
           }
@@ -172,7 +174,7 @@ export default class CPP14Engine extends Engine {
         // TODO 自動生成された catch ブロック
         // e.printStackTrace();
       }
-      return ret; 
+      return ret;
     },            'FUNCTION');
     global.setTop('fgetc', (arg:any) => {
       let ch = -1;
@@ -181,7 +183,7 @@ export default class CPP14Engine extends Engine {
       ch = fp.fgetc();
       return ch;
     },            'FUNCTION');
-    global.setTop('fgets', (s:number,n:number,stream:number) => {
+    global.setTop('fgets', (s:number, n:number, stream:number) => {
       const ch = -1;
       const fp:File = global.getValue(stream);
       const buf = fp.fgets(n);
@@ -235,8 +237,8 @@ export default class CPP14Engine extends Engine {
     global.setTop('malloc', (x:number) => {
       const num = x;
       const heapAddress = global.setHeap(this.randInt32(), '?');
-      for (let i = 1;i < num;++i) {
-        global.setHeap(this.randInt32(),'?');
+      for (let i = 1; i < num; ++i) {
+        global.setHeap(this.randInt32(), '?');
       }
       global.setMallocSize(heapAddress, num);
       return heapAddress;
@@ -247,7 +249,7 @@ export default class CPP14Engine extends Engine {
       return global.removeOnMemory(address, size);
     },            'FUNCTION');
     global.setTop('rand', (x:number) => {
-      return Math.round(Math.random() * Math.pow(0, Math.pow(2,32)));
+      return Math.round(Math.random() * Math.pow(0, Math.pow(2, 32)));
     },            'FUNCTION');
     global.setTop('abs', (x:number) => {
       return Math.abs(x);
@@ -264,7 +266,7 @@ export default class CPP14Engine extends Engine {
     global.setTop('atan', (x:number) => {
       return Math.atan(x);
     },            'FUNCTION');
-    
+
     global.setTop('cos', (x:number) => {
       return Math.cos(x);
     },            'FUNCTION');
@@ -312,11 +314,11 @@ export default class CPP14Engine extends Engine {
       return Math.abs(x);
     },            'FUNCTION');
     global.setTop('hypot', (x:number, y:number) => {
-      return Math.hypot(x,y);
+      return Math.hypot(x, y);
     },            'FUNCTION');
 
     global.setTop('pow', (x:number, y:number) => {
-      return Math.pow(x,y);
+      return Math.pow(x, y);
     },            'FUNCTION');
     global.setTop('sqrt', (x:number) => {
       return Math.sqrt(x);
@@ -336,16 +338,16 @@ export default class CPP14Engine extends Engine {
     global.setTop('fdim', (x:number, y:number) => {
       const a = Math.abs(x);
       const b = Math.abs(y);
-      return Math.abs(Math.max(a,b) - Math.min(a,b));
+      return Math.abs(Math.max(a, b) - Math.min(a, b));
     },            'FUNCTION');
     global.setTop('fmax', (x:number, y:number) => {
-      return Math.max(x,y);
+      return Math.max(x, y);
     },            'FUNCTION');
     global.setTop('fmin', (x:number, y:number) => {
-      return Math.min(x,y);
+      return Math.min(x, y);
     },            'FUNCTION');
     global.setTop('fmod', (x:number, y:number) => {
-      return math.mod(x,y);
+      return math.mod(x, y);
     },            'FUNCTION');
   }
 
@@ -369,7 +371,7 @@ export default class CPP14Engine extends Engine {
       let op = <string>arg;
       if (op === '++' || op === '--') {
         op = '_' + op;
-        return yield* this.execUnaryOp(new UniUnaryOp(op,left),scope);
+        return yield* this.execUnaryOp(new UniUnaryOp(op, left), scope);
       }
       if (right instanceof UniExpr) {
         return yield* super.execBinOp(op, scope, left, right);
@@ -383,7 +385,7 @@ export default class CPP14Engine extends Engine {
     }
     switch (uniOp.operator) {
       case '&': {
-        const adr = this.getAddress(uniOp.expr,scope);
+        const adr = this.getAddress(uniOp.expr, scope);
         return adr;
       }
       case '*': {
@@ -398,11 +400,11 @@ export default class CPP14Engine extends Engine {
           l.push(uniOp.expr);
         }
         const umc = new UniMethodCall(null, new UniIdent('sizeof'), l);
-        const v = yield *this.execExpr(umc,scope);
+        const v = yield *this.execExpr(umc, scope);
         return v;
       }
     }
-    return yield* super.execUnaryOp(uniOp,scope);
+    return yield* super.execUnaryOp(uniOp, scope);
   }
 
   protected execCast(expr:UniCast, scope:Scope):any {
@@ -446,7 +448,6 @@ export default class CPP14Engine extends Engine {
 	  return code;
   }
 
-
   protected execStringLiteral(expr:UniStringLiteral, scope:Scope):any {
     const value:string = (<UniStringLiteral>expr).value;
     const list:number[] = [];
@@ -457,7 +458,6 @@ export default class CPP14Engine extends Engine {
     list.push(0);
     return list;
   }
-
 
   public sizeof(type:string):number {
     return 1;
@@ -472,7 +472,7 @@ export default class CPP14Engine extends Engine {
 		}
 		return 4;*/
   }
- 
+
   // Byte[]
   public static bytesToStr(obj:any):string {
     const bytes = <number[]>obj;
@@ -481,7 +481,7 @@ export default class CPP14Engine extends Engine {
 
     // new String(data);
     let str = '';
-    for (let i = 0;i < length;++i) {
+    for (let i = 0; i < length; ++i) {
       str += String.fromCharCode(bytes[i]);
     }
     return str;
