@@ -4,8 +4,6 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FailPlugin = require('webpack-fail-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const pkg = require('../package.json');
 
 const rules = require('./webpack.rules');
 
