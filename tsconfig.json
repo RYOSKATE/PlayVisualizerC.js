@@ -28,10 +28,11 @@
     "gen/**/*.ts",
     "node_modules/antlr4ts/**/*.ts"
   ],
+  "include": [
+    "src/*",
+  ],
   "exclude": [
     "node_modules",
-    "dist",
-    "test",
-    "defs"
+    "docs",
   ]
 }

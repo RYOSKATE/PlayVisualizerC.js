@@ -11,7 +11,7 @@ export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
     outputEditor.$blockScrolling = Infinity;
     outputEditor.setTheme("ace/theme/terminal");
     const id = '#' + idName
-    $(id).on('keydown', function (e) {
+    $(id).on('keydown', function () {
         if (window.GlobalStorage.isScanf == "true") {
             outputEditor.setReadOnly(false);
         }
@@ -69,7 +69,7 @@ export const createEditor = (idName, canWrite, initText) => {
             alert("デバッグ開始ボタンを押してください");
             $('canvas').clearCanvas();
         };
-        $('#debug').click(function (e) {
+        $('#debug').click(function () {
             const text = sourceCodeEditor.getValue();
             if (text.length <= 1) {
                 alert("ソースコードがありません！");
@@ -87,7 +87,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 window.GlobalStorage.debug = "true";
             }
         });
-        $('#reset').click(function (e) {
+        $('#reset').click(function () {
             if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
@@ -101,7 +101,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 showNotDebuggingMsg();
             }
         });
-        $('#exec').click(function (e) {
+        $('#exec').click(function () {
             if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
@@ -116,7 +116,7 @@ export const createEditor = (idName, canWrite, initText) => {
             }
         });
 
-        $('#step').click(function (e) {
+        $('#step').click(function () {
             if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
@@ -130,7 +130,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 showNotDebuggingMsg();
             }
         });
-        $('#back').click(function (e) {
+        $('#back').click(function () {
             if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
@@ -145,7 +145,7 @@ export const createEditor = (idName, canWrite, initText) => {
             }
 
         });
-        $('#stop').click(function (e) {
+        $('#stop').click(function () {
             if (window.GlobalStorage.debug == "true") {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
@@ -189,7 +189,7 @@ const drawVisualizedResult = (jsondata, editor) => {
             const range = new Range(new Number(codeRange.begin.y - 1), new Number(codeRange.begin.x), new Number(codeRange.end.y - 1), new Number(codeRange.end.x + 1));
             editor.getSelection().setSelectionRange(range);
         }
-        const nextLineEditOutput = jsondata.output.replace(/\\n/g, '\n');
+        // const nextLineEditOutput = jsondata.output.replace(/\\n/g, '\n');
         createConsoleEditor("output", jsondata.output);
         drawMemoryState(d, 1);
     }

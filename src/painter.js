@@ -304,7 +304,7 @@ export const drawMemoryState = (data) => {
         }
     }
     drawAllPtrArrow();
-    function onDrag(layer) {
+    function onDrag() {
         var layers = $('canvas').getLayers()
         for (var i = 0; i < layers.length; ++i) {
             if (~layers[i].name.indexOf("-arrow")) {

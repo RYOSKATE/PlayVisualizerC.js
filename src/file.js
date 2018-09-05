@@ -12,7 +12,7 @@ export const file_upload = (evt) => {
             } else {
                 reject();
             }
-        }).then((ret) => {
+        }).then((/*ret*/) => {
             // ResetAllFileList(ret.filenames);
         }).catch(() => {
             alert("Failed to add");
@@ -33,7 +33,7 @@ export const deleteFile = (filename) => {
             } else {
                 reject();
             }
-        }).then((ret) => {
+        }).then((/*ret*/) => {
             // ResetAllFileList(ret.filenames);
         }).catch(() => {
             alert("Failed to delete");

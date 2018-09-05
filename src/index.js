@@ -19,7 +19,7 @@ int main()
     return 0;
 }`;
 const editor = createEditor('editorMain', true, defaultSourceCode);
-const consolEditor = createConsoleEditor("output", "", editor);
+/*const consolEditor =*/ createConsoleEditor("output", "", editor);
 
 // ファイルアップロード時の処理
 document.getElementById('files').addEventListener('change', file_upload, false);
@@ -47,7 +47,7 @@ $(document).on('click', '.popup_btn', function () {
 window.addEventListener("load", () => {
   const container = document.getElementById("canvasContainer");
   const canvas1 = document.getElementById("display");
-  const editorMain = document.getElementById("editorMain");
+  // const editorMain = document.getElementById("editorMain");
   let queue = null;
   let wait = 300;
 
