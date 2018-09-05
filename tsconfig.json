@@ -2,13 +2,11 @@
   "compilerOptions": {
     "module": "es2015",
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "esnext",
     "sourceMap": false,
     "inlineSourceMap": true,
     "lib": [
-      "es2015",
-      "es2016",
-      "es2017",
+      "esnext",
       "dom"
     ],
     "declaration": false,
