@@ -9,15 +9,16 @@ module.exports = merge(baseConfig, {
   entry: [
     'webpack/hot/dev-server',
     'webpack-hot-middleware/client?quiet=true',
-    `./${conf.path.src('index')}`
   ],
   output: {
     path: path.join(process.cwd(), conf.paths.tmp),
-    filename: 'index.js'
   },
   mode: 'development',
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    })
   ],
   devtool: 'source-map'
 });

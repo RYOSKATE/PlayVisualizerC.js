@@ -7,6 +7,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const rules = require('./webpack.rules');
 
 module.exports = {
+    entry: [
+        `./${conf.path.src('index')}`
+    ],
+    output: {
+        filename: 'index.js'
+    },
     performance: { hints: false },
     module: {
         rules
@@ -26,8 +32,7 @@ module.exports = {
                 tslint: {
                     configuration: require('../tslint.json')
                 }
-            },
-            debug: true
+            }
         })
     ],
     node: {
