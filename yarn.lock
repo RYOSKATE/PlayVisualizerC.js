@@ -1716,7 +1716,7 @@ content-type@~1.0.4:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/content-type/download/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
 
-convert-source-map@^1.5.0, convert-source-map@^1.5.1:
+convert-source-map@^1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
 
@@ -6301,7 +6301,7 @@ undertaker@^1.0.0:
     object.reduce "^1.0.0"
     undertaker-registry "^1.0.0"
 
-unicoen.ts@^0.0.2:
+unicoen.ts@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/unicoen.ts/-/unicoen.ts-0.0.2.tgz#85889d658e3ec1e3cf9bf8791d0047d66fcac0f6"
   dependencies:
