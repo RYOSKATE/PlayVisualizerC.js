@@ -37,7 +37,7 @@
   version "4.14.116"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
 
-"@types/mathjs@4.4.1":
+"@types/mathjs@4.4.1", "@types/mathjs@^4.4.0":
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@types/mathjs/-/mathjs-4.4.1.tgz#ce876a823848486f3675f8573e93f2d282feba19"
   dependencies:
@@ -46,6 +46,10 @@
 "@types/node@10.9.4":
   version "10.9.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
+
+"@types/node@^9.4.0":
+  version "9.6.31"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.31.tgz#4d1722987f8d808b4c194dceb8c213bd92f028e5"
 
 "@webassemblyjs/ast@1.5.13":
   version "1.5.13"
@@ -313,7 +317,7 @@ ansi-wrap@0.1.0, ansi-wrap@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/ansi-wrap/-/ansi-wrap-0.1.0.tgz#a82250ddb0015e9a27ca82e82ea603bbfa45efaf"
 
-antlr4ts@0.4.1-alpha.0:
+antlr4ts@^0.4.1-alpha.0:
   version "0.4.1-alpha.0"
   resolved "https://registry.yarnpkg.com/antlr4ts/-/antlr4ts-0.4.1-alpha.0.tgz#ac5717f30f3efa3617b004e8ff4f860b9c7d4d20"
 
@@ -1712,7 +1716,7 @@ content-type@~1.0.4:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/content-type/download/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
 
-convert-source-map@^1.5.0:
+convert-source-map@^1.5.0, convert-source-map@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
 
@@ -4105,7 +4109,7 @@ math-random@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
 
-mathjs@5.1.1:
+mathjs@^5.0.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-5.1.1.tgz#8010cfc4711af155addc3358d58ff138a2e27247"
   dependencies:
@@ -5447,6 +5451,10 @@ sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
+scanf@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/scanf/-/scanf-1.0.2.tgz#391cad4beff248b170e5bf968cdec8e3c8549026"
+
 schema-utils@^0.4.2, schema-utils@^0.4.4, schema-utils@^0.4.5:
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.4.7.tgz#ba74f597d2be2ea880131746ee17d0a093c68187"
@@ -6293,6 +6301,17 @@ undertaker@^1.0.0:
     object.reduce "^1.0.0"
     undertaker-registry "^1.0.0"
 
+unicoen.ts@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/unicoen.ts/-/unicoen.ts-0.0.2.tgz#85889d658e3ec1e3cf9bf8791d0047d66fcac0f6"
+  dependencies:
+    "@types/mathjs" "^4.4.0"
+    "@types/node" "^9.4.0"
+    agh.sprintf "0.0.11"
+    antlr4ts "^0.4.1-alpha.0"
+    mathjs "^5.0.0"
+    scanf "^1.0.2"
+
 union-value@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/union-value/-/union-value-1.0.0.tgz#5c71c34cb5bad5dcebe3ea0cd08207ba5aa1aea4"
@@ -6578,10 +6597,6 @@ webpack-dev-server@3.1.7:
     webpack-dev-middleware "3.2.0"
     webpack-log "^2.0.0"
     yargs "12.0.1"
-
-webpack-fail-plugin@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/webpack-fail-plugin/-/webpack-fail-plugin-2.0.0.tgz#638110ed46840b585dab3cd65636c4ccf02a686e"
 
 webpack-hot-middleware@2.23.1:
   version "2.23.1"

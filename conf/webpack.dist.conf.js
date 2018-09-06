@@ -7,12 +7,8 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.conf.js');
 
 module.exports = merge(baseConfig, {
-  entry: [
-    `./${conf.path.src('index')}`
-  ],
   output: {
     path: path.join(process.cwd(), conf.paths.dist),
-    filename: 'index.js'
   },
   mode: 'production',
   optimization: {

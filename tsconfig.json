@@ -2,13 +2,11 @@
   "compilerOptions": {
     "module": "es2015",
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "esnext",
     "sourceMap": false,
     "inlineSourceMap": true,
     "lib": [
-      "es2015",
-      "es2016",
-      "es2017",
+      "esnext",
       "dom"
     ],
     "declaration": false,
@@ -30,10 +28,11 @@
     "gen/**/*.ts",
     "node_modules/antlr4ts/**/*.ts"
   ],
+  "include": [
+    "src/*",
+  ],
   "exclude": [
     "node_modules",
-    "dist",
-    "test",
-    "defs"
+    "docs",
   ]
 }

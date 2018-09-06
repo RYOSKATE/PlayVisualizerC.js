@@ -1,9 +1,9 @@
-import unicoen from './unicoen/unicoen';
+import {CPP14Engine, CPP14Mapper} from 'unicoen.ts';
 import { ResetAllFileList } from './file';
 class Field {
     constructor() {
         this.count = 0;
-        this.engine = new unicoen.CPP14Engine();
+        this.engine = new CPP14Engine();
         //this.baos = new ByteArrayOutputStream();
         this.stateHistory = new Array();// <string>
         this.outputsHistory = new Array();// <string>
@@ -260,7 +260,7 @@ class Server {
     }
 
     rawDataToUniTree(string) {
-        return (new unicoen.CPP14Mapper()).parse(string);
+        return (new CPP14Mapper()).parse(string);
     }
 
     resetEngine() {

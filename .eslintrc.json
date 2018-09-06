@@ -5,6 +5,11 @@
         "es6": true,
         "node": true
     },
+    "globals": {
+        "$":true,
+        "ace":true,
+        "Victor":true
+    },
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
