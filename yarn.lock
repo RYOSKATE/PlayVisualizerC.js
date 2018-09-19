@@ -43,9 +43,9 @@
   dependencies:
     decimal.js "^10.0.0"
 
-"@types/node@10.9.4":
-  version "10.9.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
+"@types/node@10.10.1":
+  version "10.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.10.1.tgz#d5c96ca246a418404914d180b7fdd625ad18eca6"
 
 "@types/node@^9.4.0":
   version "9.6.31"
@@ -6677,9 +6677,9 @@ webpack-sources@^1.1.0, webpack-sources@^1.2.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@4.19.0:
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.19.0.tgz#252296c8af2d21c0994911007defdb3913a7bc66"
+webpack@4.19.1:
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.19.1.tgz#096674bc3b573f8756c762754366e5b333d6576f"
   dependencies:
     "@webassemblyjs/ast" "1.7.6"
     "@webassemblyjs/helper-module-context" "1.7.6"
