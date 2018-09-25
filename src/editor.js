@@ -180,7 +180,7 @@ const drawVisualizedResult = (jsondata, editor) => {
         require('ace-min-noconflict');
         const Range = ace.require("ace/range").Range;
         const d = data[0];
-        const codeRange = d.currentExpr.codeRange;
+        const codeRange = d.nextExpr.codeRange;
         if (jsondata.debugState == "EOF") {
             const range = new Range(new Number(-1), new Number(0), new Number(-1), new Number(1));
             editor.getSelection().setSelectionRange(range);
@@ -213,8 +213,9 @@ const send = (jsondata, editor) => {
                 window.GlobalStorage.isScanf = "true";
             }
             drawVisualizedResult(ret, editor);
-        }).catch(() => {
+        }).catch((e) => {
             alert("invalid data");
+            console.error(e);
         }).finally(() => {
             removeLoading();
         });

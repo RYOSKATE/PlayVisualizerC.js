@@ -56,50 +56,6 @@ class Server {
         return this.field;
     }
 
-    // getUserDir() {
-    //     if (fs.accessSync(this.tmpDirName)) {
-    //         fs.mkdirSync(this.tmpDirName); // mkdir -p
-    //     }
-    //     return this.tmpDirName;
-    // }
-
-    // public getUserDirFilesStr(uuid: String): Array<String> {
-    //     const dirpStr = this.getUserDir(uuid);
-    //     const dirList = this.getListOfPaths(dirpStr);;
-    //     const filenamesStr = dirList.map{ _.getName };
-    //     return filenamesStr
-    // }
-
-    // public flatten(list: Array<any>): Array<UniNode> {
-    //     const nodes = new Array<UniNode>();
-    //     for (const element of list) {
-    //         if (element instanceof UniNode) {
-    //             nodes.add(element.asInstanceOf[UniNode])
-    //         }
-    //         else {
-    //             const l = flatten(element.asInstanceOf[util.List[Object]]);
-    //             for (node < - l) {
-    //                 nodes.add(node)
-    //             }
-    //         }
-    //     }
-    //     return nodes
-    // }
-    // const files = fs.readdirSync(dir);
-    // public getListOfPaths(dir: String): Array<String> {
-    //     if (d.exists) {
-    //         let files = d.listFiles.filter(_.isFile).toList;
-    //         d.listFiles.filter(_.isDirectory).foreach{
-    //             dir =>
-    //                 files = files ::: getListOfPaths(dir.getAbsolutePath)
-    //         }
-    //         files
-    //     }
-    //     else {
-    //         List[JFile]()
-    //     }
-    // }
-
     upload(files) {
         const filenames = this.addFiles(files);
         const json = {
