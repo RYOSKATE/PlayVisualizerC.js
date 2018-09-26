@@ -1,11 +1,13 @@
-export const drawMemoryState = (data) => {
-
-    //一度全て削除する
+export const clearMemoryState = () => {
     $('canvas').clearCanvas();
     var alllayers = $('canvas').getLayers();
     for (var i = alllayers.length - 1; 0 <= i; --i)
         $('canvas').removeLayer(alllayers[i]).drawLayers();
+};
+export const drawMemoryState = (data) => {
 
+    //一度全て削除する
+    clearMemoryState();
 
     $.jCanvas.defaults.fromCenter = false;//座標を図形の中央ではなく左上に
     $.jCanvas.defaults.layer = true;//図形のレイヤー処理を有効化(グループ処理)
