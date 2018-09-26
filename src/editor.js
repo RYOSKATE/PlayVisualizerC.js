@@ -1,4 +1,4 @@
-import { drawMemoryState } from './painter';
+import { CanvarDrawer } from './painter';
 import { dispLoading, removeLoading } from './window';
 import server from './server';
 
@@ -67,13 +67,13 @@ export const createEditor = (idName, canWrite, initText) => {
     if (canWrite) {
         const showNotDebuggingMsg = () => {
             alert("デバッグ開始ボタンを押してください");
-            $('canvas').clearCanvas();
+            CanvarDrawer.clearMemoryState();
         };
         $('#debug').click(function () {
             const text = sourceCodeEditor.getValue();
             if (text.length <= 1) {
                 alert("ソースコードがありません！");
-                $('canvas').clearCanvas();
+                CanvarDrawer.clearMemoryState();
             }
             else {
                 const jsondata = { //送りたいJSONデータ
@@ -154,7 +154,7 @@ export const createEditor = (idName, canWrite, initText) => {
                     "sourcetext": sourceCodeEditor.getValue()
                 };
                 send(jsondata, sourceCodeEditor);
-                $('canvas').clearCanvas();
+                CanvarDrawer.clearMemoryState();
                 window.GlobalStorage.debug = "false";
                 window.GlobalStorage.line = 0;
             }
@@ -191,7 +191,8 @@ const drawVisualizedResult = (jsondata, editor) => {
         }
         // const nextLineEditOutput = jsondata.output.replace(/\\n/g, '\n');
         createConsoleEditor("output", jsondata.output);
-        drawMemoryState(d, 1);
+        const canvasDrawer = new CanvarDrawer();
+        canvasDrawer.drawMemoryState(d);
     }
 }
 
