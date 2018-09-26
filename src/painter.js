@@ -1,197 +1,270 @@
-export const clearMemoryState = () => {
-    $('canvas').clearCanvas();
-    var alllayers = $('canvas').getLayers();
-    for (var i = alllayers.length - 1; 0 <= i; --i)
-        $('canvas').removeLayer(alllayers[i]).drawLayers();
-};
-export const drawMemoryState = (data) => {
-
-    //一度全て削除する
-    clearMemoryState();
-
-    $.jCanvas.defaults.fromCenter = false;//座標を図形の中央ではなく左上に
-    $.jCanvas.defaults.layer = true;//図形のレイヤー処理を有効化(グループ処理)
-    $.jCanvas.defaults.drag = onDrag; // Dragされた
-    $('canvas').setLayer('mainLayer', {
-        visible: false//高速化・ちらつき防止のため最終的な状態になるまで描画しない
-    }).drawLayers();
-
-    var origin = new Victor(50, 50);//図形描画の基準位置
-    var nextPos = origin.clone();//次のRectの左上の位置
-
-    var stacks = data.stacks;
-    for (var i = 0, len = stacks.length; i < len; ++i) {
-        drawStack(stacks[i]);//それぞれのスタックについて描画
+export class CanvarDrawer {
+    constructor() {
+        this.reset()
     }
 
-    function drawStack(stack) {
-        var pos = nextPos.clone();//次の変数の左上の位置
-        var memoryName = stack.name;//nameはその関数名など
-        var variables = stack.variables;//変数一覧
-        var numOfVars = variables.length;
+    reset() {
+        CanvarDrawer.clearMemoryState();
+        this.selectColorIndex = 0;
+    }
 
-        if (0 < numOfVars)//そのスタック内の変数を全て描画
-        {
-            drawText(memoryName, pos.x, pos.y, memoryName, memoryName);
-            var heightOffset = 25;
-            var borderHeight = heightOffset;
-            var maxWidths = [0, 0, 0, 0];//型名、変数名、値、&変数名(メモリアドレス)の順番、配列の場合は1列目空欄で4列目を追加。(2次元なら3,4,5列)
-            var numOfRow = 0;
-            function makeVariables(numOfVars, variables, col) {
-                for (var i = 0; i < numOfVars; ++i, ++numOfRow) {
-                    pos.addY(new Victor(0, heightOffset))
-                    var v = variables[i];
-                    const absName = v.getName();
-                    const uniqueName = memoryName + "-" + absName;//ユニークな名前: スタック名+変数名+列名+テキスト
-                    drawVariable(v.type, pos.x, pos.y, uniqueName + "-type", memoryName);
-                    var typeWidth = $("#display").getLayer(uniqueName + "-type" + "-text").width;
+    static clearMemoryState(){
+        $('canvas').removeLayers();
+        $('canvas').clearCanvas();
+    }
 
-                    drawVariable(v.name, pos.x + typeWidth, pos.y, uniqueName + "-name", memoryName);
-                    var nameWidth = $("#display").getLayer(uniqueName + "-name" + "-text").width;
+    drawMemoryState (data) {
+        //一度全て削除する
+        this.reset();
+    
+        $.jCanvas.defaults.fromCenter = false;//座標を図形の中央ではなく左上に
+        $.jCanvas.defaults.layer = true;//図形のレイヤー処理を有効化(グループ処理)
+        $('canvas').setLayer('mainLayer', {
+            visible: false//高速化・ちらつき防止のため最終的な状態になるまで描画しない
+        }).drawLayers();
+    
+        const origin = new Victor(50, 50);//図形描画の基準位置
+        let nextPos = origin.clone();//次のRectの左上の位置
+    
+        const stacks = data.stacks;
+        for (const stack of stacks) {
+            const stackDrawer = new StackDrawer(stack, nextPos);
+            nextPos = stackDrawer.drawStack();
+        }        
+        
+        //アドレスから矢印描画
+        const arrowDrawer = new ArrowDrawer(stacks);
+        arrowDrawer.drawAllPtrArrow(stacks);
+        
+        $.jCanvas.defaults.drag = arrowDrawer.onDrag; // Dragされた
+        $('canvas').getLayers().reverse();//スタックのRectが最前面になり内側に対するマウスイベントを全て全て受け取ってしまう。
+        $('canvas').setLayer('mainLayer', {
+            visible: true//ここまでの処理が終わって初めて描画する
+        }).drawLayers();
+    
+        return data;
+    }
 
-                    var value = v.value;
-                    var address = "0x" + v.address.toString(16)
-                    if (v.value instanceof Array) {
-                        value = "0x" + v.value[0].address.toString(16);
-                        address = "SYSTEM";
-                    }
-                    if (~v.type.indexOf("*") && v.value != null)
-                        value = "0x" + value.toString(16);
-                    drawVariable(value, pos.x + typeWidth + nameWidth, pos.y, uniqueName + "-value", memoryName);
-                    var valueWidth = Math.max($("#display").getLayer(uniqueName + "-value" + "-text").width, 80);
-
-                    drawVariable("&" + v.getName() + "(" + address + ")", pos.x + typeWidth + nameWidth + valueWidth, pos.y, uniqueName + "-address", memoryName);
-                    var addressWidth = $("#display").getLayer(uniqueName + "-address" + "-text").width;
+}
 
 
-                    //列を揃えるために最大幅を計算
-                    maxWidths[col] = Math.max(maxWidths[col], typeWidth);
-                    maxWidths[col + 1] = Math.max(maxWidths[col + 1], nameWidth);
-                    maxWidths[col + 2] = Math.max(maxWidths[col + 2], valueWidth);
-                    if (col + 3 < maxWidths.length)
-                        maxWidths[col + 3] = Math.max(maxWidths[col + 3], addressWidth);
-                    else
-                        maxWidths[col + 3] = addressWidth;
+class StackDrawer {
+    constructor(stack, nextPos){
+        this.nextPos = nextPos;
+        this.pos = nextPos.clone();//次の変数の左上の位置
+        this.stack = stack;
+        this.memoryName = stack.name;//nameはその関数名など
+        this.heightOffset = 25;
+        this.borderHeight = 25;
+        this.maxWidths = [0, 0, 0, 0];//型名、変数名、値、&変数名(メモリアドレス)の順番、配列の場合は1列目空欄で4列目を追加。(2次元なら3,4,5列)
+        this.numOfRow = 0;
+    }
 
-                    borderHeight += heightOffset;
-
-                    if (v.value instanceof Array) {
-                        pos.addX(new Victor(maxWidths[col], 0))
-                        makeVariables(v.value.length, v.value, col + 1);
-                        pos.addX(new Victor(-maxWidths[col], 0))
-                    }
+    drawStack () {
+        const variables = this.stack.variables;//変数一覧
+        if (variables.length <= 0){
+            return this.nextPos;
+        }
+        //そのスタック内の変数を全て描画
+        drawText(this.memoryName, this.pos.x, this.pos.y, this.memoryName, this.memoryName);
+        this.makeVariables(variables, 0);
+        //各列の最大幅に合わせてx座標修正
+        const memoryTextLayer = $("#display").getLayer(this.memoryName + "-text");
+        const borderWidth = Math.max(memoryTextLayer.width, this.maxWidths.reduce((x, y) => x + y));
+        memoryTextLayer.x = memoryTextLayer.x + (borderWidth / 2) - (memoryTextLayer.width / 2);
+        const reDrawVariable = (variables, col) => {
+            for (const v of variables) {
+                //ユニークな名前: スタック名+変数名+列名+テキスト
+                const uniqueName = [this.memoryName, v.getName()].join('-');
+                const leftPosX = $("#display").getLayer(`${uniqueName}-type-text`).x;
+                const colName = ['name', 'value', 'address'];
+                for(let i=0, posX = leftPosX; i<colName.length; ++i) {
+                    posX += this.maxWidths[col + i];
+                    $("#display").getLayer([uniqueName, colName[i], 'text'].join('-')).x = posX;
+                }
+                if (v.value instanceof Array) {
+                    reDrawVariable(v.value, col + 1);
                 }
             }
-            makeVariables(numOfVars, variables, 0);
-            //各列の最大幅に合わせてx座標修正
-            var memoryTextLayer = $("#display").getLayer(memoryName + "-text");
-            var borderWidth = Math.max(memoryTextLayer.width, maxWidths.reduce(function (x, y) { return x + y; }));
-            memoryTextLayer.x = memoryTextLayer.x + (borderWidth / 2) - (memoryTextLayer.width / 2);
-            function redrawVariable(numOfVars, variables, col) {
-                for (var i = 0; i < numOfVars; ++i) {
-                    var v = variables[i];
-                    var uniqueName = memoryName + "-" + v.getName();//ユニークな名前: スタック名+変数名+列名+テキスト
-                    var leftPosX = $("#display").getLayer(uniqueName + "-type" + "-text").x;
-                    $("#display").getLayer(uniqueName + "-name" + "-text").x = leftPosX + maxWidths[col];
-                    $("#display").getLayer(uniqueName + "-value" + "-text").x = leftPosX + maxWidths[col] + maxWidths[col + 1];
-                    $("#display").getLayer(uniqueName + "-address" + "-text").x = leftPosX + maxWidths[col] + maxWidths[col + 1] + maxWidths[col + 2];
-                    if (v.value instanceof Array) {
-                        redrawVariable(v.value.length, v.value, col + 1);
-                    }
-                }
+        };
+        reDrawVariable(variables, 0);
+        //console.log(this.maxWidths);
+        //スタックを囲む四角形を描画
+        const posTopLeft = this.nextPos.clone().add(new Victor(-5, -5));
+        drawRect(posTopLeft, borderWidth, this.borderHeight, this.memoryName);
+
+        //列単位で縦線を描画
+        const memoryRectLayer = $("#display").getLayer(this.memoryName + "-rect");
+        const start = new Victor(memoryRectLayer.x + 5, memoryRectLayer.y + this.heightOffset);
+        const end = start.clone().addY(new Victor(0, memoryRectLayer.height - this.heightOffset));
+        for (let i = 0; i < this.maxWidths.length - 1; ++i) {
+            drawLine(start.addX(new Victor(this.maxWidths[i], 0)), 
+                end.addX(new Victor(this.maxWidths[i], 0)), 
+                `${this.memoryName}_${i}-colline`, 
+                this.memoryName);
+        }
+        //変数単位で横線を描画
+        const lineLeft = posTopLeft.clone();
+        const lineRight = lineLeft.clone().addX(new Victor(borderWidth + 10, 0));
+        for (let i = 0; i < this.numOfRow; ++i) {
+            const start = lineLeft.addY(new Victor(0, this.heightOffset));
+            const end = lineRight.addY(new Victor(0, this.heightOffset));
+            const name = `${this.memoryName}_${i}-rowline`;
+            const groupname = this.memoryName;
+            drawLine(start, end, name, groupname);
+        }
+        this.nextPos = this.pos.add(new Victor(50, this.heightOffset + 10)).clone();
+        return this.nextPos;
+    }
+    
+    makeVariables(variables, col){
+        for (const v of variables) {
+            this.pos.addY(new Victor(0, this.heightOffset))
+            let posX = this.pos.x;
+
+            const absName = v.getName();
+            const uniqueName = this.memoryName + "-" + absName;//ユニークな名前: スタック名+変数名+列名+テキスト
+            drawVariable(v.type, posX, this.pos.y, `${uniqueName}-type`, this.memoryName);
+            const typeWidth = $("#display").getLayer(`${uniqueName}-type-text`).width;
+            posX += typeWidth;
+
+            drawVariable(v.name, this.pos.x, this.pos.y, `${uniqueName}-name`, this.memoryName);
+            const nameWidth = $("#display").getLayer(`${uniqueName}-name-text`).width;
+            posX += nameWidth;
+
+            let value = v.value;
+            let address = "0x" + v.address.toString(16)
+            if (v.value instanceof Array && 0 <= v.value.length) {
+                value = "0x" + v.value[0].address.toString(16);
+                address = "SYSTEM";
             }
-            redrawVariable(numOfVars, variables, 0);
-            console.log(maxWidths);
-            //スタックを囲む四角形を描画
-            var posTopLeft = nextPos.clone().add(new Victor(-5, -5));
-            $("#display").drawRect({
-                strokeStyle: "black",
-                strokeWidth: 1,
-                x: posTopLeft.x,
-                y: posTopLeft.y,
-                width: borderWidth + 10,
-                height: borderHeight,
-                draggable: true,
-                name: memoryName + "-rect",
-                groups: [memoryName],
-                dragGroups: [memoryName]/*,
-                click: function (layer) {
-                    // Click a star to spin it
-                    $(this).animateLayer(layer, {
-                        rotate: '+=360'
-                    })
-                }*/
-            });
+            if (~v.type.indexOf("*") && v.value != null) {
+                value = "0x" + value.toString(16);
+            }
+            
+            drawVariable(value, posX, this.pos.y, `${uniqueName}-value`, this.memoryName);
+            const valueWidth = Math.max($("#display").getLayer(`${uniqueName}-value-text`).width, 80);
+            posX += valueWidth;
+
+            drawVariable("&" + `${v.getName()}(${address})`, posX, this.pos.y, `${uniqueName}-address`, this.memoryName);
+            const addressWidth = $("#display").getLayer(`${uniqueName}-address-text`).width;
 
 
-            function drawLine(start, end, name, groupname) {
-                $('#display').drawLine({
-                    strokeStyle: '#000',
-                    strokeWidth: 1,
-                    x1: start.x, y1: start.y,
-                    x2: end.x, y2: end.y,
-                    name: name,
-                    groups: [groupname],
-                    dragGroups: [groupname]
-                });
-            }
+            //列を揃えるために最大幅を計算
+            this.maxWidths[col]     = Math.max(this.maxWidths[col],     typeWidth);
+            this.maxWidths[col + 1] = Math.max(this.maxWidths[col + 1], nameWidth);
+            this.maxWidths[col + 2] = Math.max(this.maxWidths[col + 2], valueWidth);
+            if (col + 3 < this.maxWidths.length)
+                this.maxWidths[col + 3] = Math.max(this.maxWidths[col + 3], addressWidth);
+            else
+                this.maxWidths[col + 3] = addressWidth;
 
-            //列単位で縦線を描画
-            var memoryRectLayer = $("#display").getLayer(memoryName + "-rect");
-            var start = new Victor(memoryRectLayer.x + 5, memoryRectLayer.y + heightOffset);
-            var end = start.clone().addY(new Victor(0, memoryRectLayer.height - heightOffset));
-            for (var i = 0; i < maxWidths.length - 1; ++i) {
-                drawLine(start.addX(new Victor(maxWidths[i], 0)), end.addX(new Victor(maxWidths[i], 0)), memoryName + "_" + i + "-colline", memoryName);
+            this.borderHeight += this.heightOffset;
+
+            if (v.value instanceof Array) {
+                this.pos.addX(new Victor(this.maxWidths[col], 0))
+                this.makeVariables(v.value, col + 1);
+                this.pos.addX(new Victor(-this.maxWidths[col], 0))
             }
-            //変数単位で横線を描画
-            var lineLeft = posTopLeft.clone();
-            var lineRight = lineLeft.clone().addX(new Victor(borderWidth + 10, 0));
-            for (var i = 0; i < numOfRow; ++i) {
-                var start = lineLeft.addY(new Victor(0, heightOffset));
-                var end = lineRight.addY(new Victor(0, heightOffset));
-                var name = memoryName + "_" + i + "-rowline";
-                var groupname = memoryName;
-                drawLine(start, end, name, groupname);
-            }
-            nextPos = pos.add(new Victor(50, heightOffset + 10)).clone();
+            ++this.numOfRow;
         }
     }
+}
 
-    function drawText(text, x, y, name, groupname) {
-        $("#display").drawText({
-            fillStyle: "black",
-            strokeStyle: "black",
-            strokeWidth: "0.5",
-            x: x,
-            y: y,
-            fontSize: 14,
-            fontFamily: "sans-serif",
-            text: " " + text + " ",
-            name: name + "-text",//スタック名-変数名-列名-text
-            draggable: true,
-            groups: [groupname],//スタック名,変数名
-            dragGroups: [groupname]//スタック名,変数名
-        });
+const drawLine = (start, end, name, groupname) => {
+    $('#display').drawLine({
+        strokeStyle: '#000',
+        strokeWidth: 1,
+        x1: start.x,
+        y1: start.y,
+        x2: end.x,
+        y2: end.y,
+        name: name,
+        groups: [groupname],
+        dragGroups: [groupname]
+    });
+};
+
+const drawRect = (posTopLeft, borderWidth, borderHeight, memoryName) => {
+    $("#display").drawRect({
+        strokeStyle: "black",
+        strokeWidth: 1,
+        x: posTopLeft.x,
+        y: posTopLeft.y,
+        width: borderWidth + 10,
+        height: borderHeight,
+        draggable: true,
+        name: memoryName + "-rect",
+        groups: [memoryName],
+        dragGroups: [memoryName]/*,
+        click: function (layer) {
+            // Click a star to spin it
+            $(this).animateLayer(layer, {
+                rotate: '+=360'
+            })
+        }*/
+    });
+};
+
+const drawText = (text, x, y, name, groupname) => {
+    $("#display").drawText({
+        fillStyle: "black",
+        strokeStyle: "black",
+        strokeWidth: "0.5",
+        x: x,
+        y: y,
+        fontSize: 14,
+        fontFamily: "sans-serif",
+        text: " " + text + " ",
+        name: name + "-text",//スタック名-変数名-列名-text
+        draggable: true,
+        groups: [groupname],//スタック名,変数名
+        dragGroups: [groupname]//スタック名,変数名
+    });
+};
+
+const drawVariable = (t, x, y, name, groupname) => {
+    $("#display").drawText({
+        fillStyle: "black",
+        strokeStyle: "black",
+        strokeWidth: "0.5",
+        x: x,
+        y: y,
+        fontSize: 14,
+        fontFamily: "sans-serif",
+        text: `   ${t}   `,
+        name: `${name}-text`,//スタック名-変数名-列名-text
+        draggable: true,
+        groups: [groupname],//スタック名,変数名
+        dragGroups: [groupname],//スタック名,変数名
+    });
+};
+
+class Arrow {
+    constructor(stack, val, valueOrAddrss){
+        this.layerName = [stack.name, val.getName(), valueOrAddrss, "text"].join('-');
+        this.value = $("#display").getLayer(this.layerName);
+        this.x = $("#display").getLayer(`${stack.name}-rect`).x;
+        this.y = this.value.y + this.value.height / 2;
+        this.pos = new Victor(this.x, this.y);
     }
+}
 
-    function drawVariable(t, x, y, name, groupname) {
-        $("#display").drawText({
-            fillStyle: "black",
-            strokeStyle: "black",
-            strokeWidth: "0.5",
-            x: x,
-            y: y,
-            fontSize: 14,
-            fontFamily: "sans-serif",
-            text: "   " + t + "   ",
-            name: name + "-text",//スタック名-変数名-列名-text
-            draggable: true,
-            groups: [groupname],//スタック名,変数名
-            dragGroups: [groupname],//スタック名,変数名
-        });
+class ArrowDrawer {
+    constructor(stacks){
+        this.stacks = stacks;
+        this.colorHashMap = {};
+        this.arrowColorSet = new ArrowColorSet();
+
+        this.onDrag = () => {
+            const layers = $('canvas').getLayers()
+            const toRemoveLayers = layers.filter((layer) => ~layer.name.indexOf("-arrow"));
+            $.each(toRemoveLayers, (index, layer) => $("#display").removeLayer(layer.name));
+            this.drawAllPtrArrow(this.stacks);
+        };
+
     }
-
-    function drawArrow(start, mid, end, name, fromGroup, toGroup) {
+    drawArrow (name, start, mid, end, fromGroup, toGroup) {
         $('#display').drawQuadratic({
             strokeStyle: 'rgba(0, 0, 0, 0.5)',
             //fillStyle : 'rgba(0, 0, 0, 0.7)',
@@ -203,16 +276,84 @@ export const drawMemoryState = (data) => {
             x1: start.x, y1: start.y,
             cx1: mid.x, cy1: mid.y,
             x2: end.x, y2: end.y,
-            name: name + "-arrow",
-            drag: onDrag, // Dragされた
+            name: `${name}-arrow`,
+            drag: this.onDrag, // Dragされた
             groups: [fromGroup, toGroup],
             dragGroups: [fromGroup, toGroup]
         })
     }
-    var selectColorIndex = 0;
-    var colorHashMap = {};
-    function getColorSet() {
-        var array = [
+
+    drawAllPtrArrow()  {
+        for (const stack of this.stacks) {
+            this.drawPtrArrow(stack, stack.variables);
+        }
+    };
+    
+    drawPtrArrow (baseStack, baseVariables) {
+        for (const baseVariable of baseVariables) {
+            const isTypePtr = (baseVariable.type.indexOf('*') != -1);
+            if (isTypePtr || baseVariable.value instanceof Array) {
+                const fromArrow = new Arrow(baseStack, baseVariable, 'value');
+
+                for (const targetStack of this.stacks) {
+                    const targetVariables = targetStack.variables;
+                    this.drawPtrArrow2(baseStack, targetStack, baseVariable, targetVariables, fromArrow);
+                }
+            }
+            if (baseVariable.value instanceof Array) {
+                this.drawPtrArrow(baseStack, baseVariable.value);
+            }
+        }
+    }
+    
+    drawPtrArrow2(baseStack, targetStack, baseVariable, targetVariables, fromArrow) {
+        for (const targetVariable of targetVariables) {
+            console.log(`${targetVariable.name}, ${baseVariable.name}`);
+            const isArrayNamePtr = baseVariable.value instanceof Array && targetVariable.name == `${baseVariable.name}[0]`;
+            if (isArrayNamePtr || targetVariable.address == baseVariable.value) {
+                const toArrow = new Arrow(targetStack, targetVariable, 'address');
+                
+                const mid = this.calcMidPos(fromArrow, toArrow);
+                
+                const name =  [baseStack.name, baseVariable.getName(), 'to', targetStack.name, targetVariable.getName()].join('-');
+                this.drawArrow(name, fromArrow.pos, mid, toArrow.pos, baseStack.name, targetStack.name);//もう一つ必要
+                if(!(name in this.colorHashMap)) {
+                    this.colorHashMap[name] = this.arrowColorSet.get();
+                }
+                const color = this.colorHashMap[name];
+                fromArrow.value.strokeStyle = color;
+                $("#display").getLayer(`${name}-arrow`).strokeStyle = color;
+                toArrow.value.strokeStyle = color;
+            }
+            else if (targetVariable.value instanceof Array) {
+                this.drawPtrArrow2(baseStack, targetStack, baseVariable, targetVariable.value, fromArrow);
+            }
+        }
+    }
+
+    calcMidPos(fromArrow, toArrow){
+        console.log(`${fromArrow}, ${toArrow}`);
+        const mid = new Victor((fromArrow.pos.x + toArrow.pos.x) / 2, (fromArrow.pos.y + toArrow.pos.y) / 2);
+        const dir = (toArrow.pos.clone().subtract(fromArrow.pos.clone()));
+        const length = dir.length();
+
+        dir.normalize();
+        if (fromArrow.pos.y < toArrow.pos.y)
+            dir.rotateDeg(90);
+        else
+            dir.rotateDeg(-90);
+
+        mid.add(dir.multiply(new Victor(length / 4, length / 4)));
+        return mid;
+    }
+}
+
+class ArrowColorSet {
+    constructor(){
+        this.selectColorIndex = 0;
+    }
+    get(){
+        const array = [
             'rgba(255, 40, 0, 0.5)',
             //'rgba(250, 245, 0, 0.5)',
             'rgba(53, 161, 107, 0.5)',
@@ -223,104 +364,10 @@ export const drawMemoryState = (data) => {
             'rgba(154, 0, 121, 0.5)',
             'rgba(102, 51, 0, 0.5)'
         ];
-        var select = array[selectColorIndex++];
-
-        if (array.length <= selectColorIndex)
-            selectColorIndex = 0;
+        const select = array[this.selectColorIndex++];
+    
+        if (array.length <= this.selectColorIndex)
+            this.selectColorIndex = 0;
         return select;
-        //アドレスから矢印描画
-    }
-    //アドレスから矢印描画
-    function drawAllPtrArrow() {
-        for (var i = 0, memlen = stacks.length; i < memlen; ++i) {
-            var variables = stacks[i].variables;
-            var varlen = stacks[i].variables.length;
-
-            function drawPtrArrow(varlen, variables, col) {
-                for (var j = 0; j < varlen; ++j) {
-                    var val = variables[j];
-                    var isTypePtr = (val.type.indexOf('*') != -1);
-                    if (isTypePtr || val.value instanceof Array) {
-                        var layerName = stacks[i].name + "-" + val.getName() + "-value" + "-text";
-                        var fromValue = $("#display").getLayer(layerName);
-                        var x = $("#display").getLayer(stacks[i].name + "-rect").x;
-                        var y = fromValue.y + fromValue.height / 2;
-                        var from = new Victor(x, y);
-
-                        for (var i2 = 0, memlen2 = stacks.length; i2 < memlen2; ++i2) {
-                            var variables2 = stacks[i2].variables;
-                            var varlen2 = stacks[i2].variables.length;
-
-                            function drawPtrArrow2(varlen2, variables2, col2) {
-                                for (var j2 = 0; j2 < varlen2; ++j2) {
-                                    var val2 = variables2[j2];
-
-                                    var isArrayNamePtr = val.value instanceof Array && val2.name == val.name + "[0]";
-                                    if (isArrayNamePtr || val2.address == val.value) {
-                                        var layerName2 = stacks[i2].name + "-" + val2.getName() + "-address" + "-text";
-                                        var toValue = $("#display").getLayer(layerName2);
-                                        var x2 = $("#display").getLayer(stacks[i2].name + "-rect").x;
-                                        var y2 = toValue.y + toValue.height / 2;
-                                        var to = new Victor(x2, y2);
-
-                                        var mid = new Victor((from.x + to.x) / 2, (from.y + to.y) / 2);
-                                        var dir = (to.clone().subtract(from.clone()));
-                                        var length = dir.length();
-                                        dir.normalize();
-                                        if (y < y2)
-                                            dir.rotateDeg(90);
-                                        else
-                                            dir.rotateDeg(-90);
-
-                                        mid.add(dir.multiply(new Victor(length / 4, length / 4)));
-
-                                        var name = stacks[i].name + "-" + val.getName() + "-to-" + stacks[i2].name + "-" + val2.getName();
-                                        drawArrow(from, mid, to, name, stacks[i].name, stacks[i2].name);//もう一つ必要
-                                        var color;
-                                        if (name in colorHashMap) {
-                                            color = colorHashMap[name]
-                                        }
-                                        else {
-                                            color = getColorSet();
-                                            colorHashMap[name] = color;
-                                        }
-                                        fromValue.strokeStyle = color;
-                                        $("#display").getLayer(name + "-arrow").strokeStyle = color;
-                                        toValue.strokeStyle = color;
-                                    }
-                                    else if (val2.value instanceof Array) {
-                                        drawPtrArrow2(val2.value.length, val2.value, col2 + 1);
-                                    }
-                                }
-                            }
-
-                            drawPtrArrow2(varlen2, variables2, 0);
-                        }
-                    }
-                    if (val.value instanceof Array) {
-                        drawPtrArrow(val.value.length, val.value, col + 1);
-                    }
-                }
-            }
-
-            drawPtrArrow(varlen, variables, 0);
-        }
-    }
-    drawAllPtrArrow();
-    function onDrag() {
-        var layers = $('canvas').getLayers()
-        for (var i = 0; i < layers.length; ++i) {
-            if (~layers[i].name.indexOf("-arrow")) {
-                $("#display").removeLayer(layers[i].name);
-                i = 0;
-            }
-        }
-        drawAllPtrArrow();
-    }
-    $('canvas').getLayers().reverse();//スタックのRectが最前面になり内側に対するマウスイベントを全て全て受け取ってしまう。
-    $('canvas').setLayer('mainLayer', {
-        visible: true//ここまでの処理が終わって初めて描画する
-    }).drawLayers();
-
-    return data;
+    };
 }
