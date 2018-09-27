@@ -6111,9 +6111,9 @@ undertaker@^1.0.0:
     object.reduce "^1.0.0"
     undertaker-registry "^1.0.0"
 
-unicoen.ts@0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/unicoen.ts/-/unicoen.ts-0.1.6.tgz#c91b9b223a6e38ca8f78b6dac7222cd344d335da"
+unicoen.ts@0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/unicoen.ts/-/unicoen.ts-0.1.7.tgz#e92a7aefeeae907a97c3c0293d422883d0e0e50d"
   dependencies:
     "@types/mathjs" "^4.4.0"
     "@types/node" "^9.4.0"

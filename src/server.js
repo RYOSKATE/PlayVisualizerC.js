@@ -216,7 +216,8 @@ class Server {
     }
 
     rawDataToUniTree(string) {
-        return (new CPP14Mapper()).parse(string);
+        const text = CPP14Engine.replaceDefine(string);
+        return (new CPP14Mapper()).parse(text);
     }
 
     resetEngine() {
