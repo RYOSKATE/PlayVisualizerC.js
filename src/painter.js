@@ -141,6 +141,9 @@ class StackDrawer {
             if (~v.type.indexOf("*") && v.value != null) {
                 value = "0x" + value.toString(16);
             }
+            if(v.type === 'char' && value != null){
+                value += ` '${String.fromCharCode(value)}'`;
+            }
             
             drawVariable(value, posX, this.pos.y, `${uniqueName}-value`, this.memoryName);
             const valueWidth = Math.max($("#display").getLayer(`${uniqueName}-value-text`).width, 80);
