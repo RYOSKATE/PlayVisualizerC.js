@@ -98,7 +98,7 @@ class Server {
                     ret = this.ajaxCall(json);
                     if (ret == null || ret == undefined)
                         break;
-                } while (ret.debugState != "EOF" && ret.debugState != "scanf");
+                } while (ret.debugState != "EOF" && ret.debugState != "stdin");
                 return ret;
             }
             case "reset": {
@@ -143,7 +143,7 @@ class Server {
                     console.log(`output:${output}`);
                     let stateText = `Step:${this.count} | Value:${stackData.getCurrentValue()}`;
                     if (this.engine.getIsWaitingForStdin()) {
-                        stateText = "scanf";
+                        stateText = "stdin";
                     } else if (!this.engine.isStepExecutionRunning()) {
                         stateText = "EOF";
                         this.isExecuting = false;

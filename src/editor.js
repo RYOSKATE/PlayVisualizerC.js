@@ -12,12 +12,12 @@ export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
     outputEditor.setTheme("ace/theme/terminal");
     const id = '#' + idName
     $(id).on('keydown', function () {
-        if (window.GlobalStorage.isScanf === true) {
+        if (window.GlobalStorage.isStdin === true) {
             outputEditor.setReadOnly(false);
         }
     });
     $(id).on('keyup', function (e) {
-        const isDuringScanf = window.GlobalStorage.isScanf === true;
+        const isDuringScanf = window.GlobalStorage.isStdin === true;
         if (!isDuringScanf) {
             outputEditor.setReadOnly(true);
         }
@@ -33,7 +33,7 @@ export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
                 "sourcetext": "",
                 stdinText
             };
-            window.GlobalStorage.isScanf = false;
+            window.GlobalStorage.isStdin = false;
             send(jsondata, sourceCodeEditor);
         }
     });
@@ -209,8 +209,8 @@ const send = (jsondata, editor) => {
             }
         }).then((ret) => {
             document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
-            if (ret.debugState == "scanf") {
-                window.GlobalStorage.isScanf = true;
+            if (ret.debugState == "stdin") {
+                window.GlobalStorage.isStdin = true;
             }
             drawVisualizedResult(ret, editor);
         }).catch((e) => {
