@@ -1,24 +1,22 @@
 import {CPP14Engine, CPP14Mapper} from 'unicoen.ts';
 import { ResetAllFileList } from './file';
-class Field {
+
+class Server {
     constructor() {
+        this.isExecuting = false;
+        this.files = new Map();
+        this.reset();
+    }
+
+    reset(){
         this.count = 0;
         this.engine = new CPP14Engine();
-        //this.baos = new ByteArrayOutputStream();
         this.stateHistory = new Array();// <string>
         this.outputsHistory = new Array();// <string>
         this.textOnEditor = "";
         this.isFirstEOF = false;
     }
-}
 
-class Server {
-    constructor() {
-        this.field = new Field();
-        this.tmpDirName = 'pvc-tmp';
-        this.isExecuting = false;
-        this.files = new Map();
-    }
     addFile(file) {
         var reader = new FileReader();
         reader.onload = function () {
@@ -27,6 +25,7 @@ class Server {
         }.bind(this);
         reader.readAsArrayBuffer(file);
     }
+
     addFiles(files) {
         for (let i = 0; i < files.length; ++i) {
             this.addFile(files[i]);
@@ -48,21 +47,9 @@ class Server {
         return names;
     }
 
-    isFieldExist() {
-        return this.field != null;
-    }
-
-    getField() {
-        return this.field;
-    }
-
     upload(files) {
         const filenames = this.addFiles(files);
         const json = {
-            //"uuid" -> uuid,
-            //"currentDir" -> currentDir,
-            //"dirp" -> dirp.toString,
-            //"num" -> request.body.file("files").size,
             "filenames": filenames
         };
         return json;
@@ -71,20 +58,10 @@ class Server {
     delete(filename) {
         const filenames = this.deleteFile(filename);
         const json = {
-            //"uuid" -> uuid,
-            //"currentDir" -> currentDir,
-            //"dirp" -> dirp.toString,
-            //"num" -> request.body.file("files").size,
             "filenames": filenames
         };
         return json;
     }
-
-    // download(filename) {
-    //     const dir = Paths.get("/tmp", uuid);
-    //     const file = new JFile(dir.toString, filename);
-    //     Ok.sendFile(content = file, inline = false);
-    // }
 
     ajaxCall(obj) {
         const stackData = obj["stackData"];
@@ -93,11 +70,12 @@ class Server {
         const sourcetext = obj["sourcetext"];
         switch (debugState) {
             case "debug": {
-                this.resetEngine().textOnEditor = sourcetext;
-                const node = this.rawDataToUniTree(this.field.textOnEditor);//UniProgram
-                const state = this.field.engine.startStepExecution(node);
+                this.resetEngine();
+                this.textOnEditor = sourcetext;
+                const node = this.rawDataToUniTree(this.textOnEditor);//UniProgram
+                const state = this.engine.startStepExecution(node);
                 const stackData = this.recordExecState(state);
-                const stdout = this.field.engine.getStdout();
+                const stdout = this.engine.getStdout();
                 const output = this.recordOutputText(stdout);
                 this.isExecuting = true;
                 const ret = {
@@ -124,46 +102,49 @@ class Server {
                 return ret;
             }
             case "reset": {
-                this.field.count = 0
-                const stackData = this.field.stateHistory[this.field.count];
-                const output = this.field.outputsHistory[this.field.count];
+                this.count = 0
+                const stackData = this.stateHistory[this.count];
+                const output = this.outputsHistory[this.count];
                 const ret = {
                     "stackData": stackData,
-                    "debugState": ("Step:" + this.field.count),
+                    "debugState": ("Step:" + this.count),
                     "output": output,
                     "sourcetext": sourcetext
                 };
                 return ret;
             }
             case "step": {
-                this.field.count += 1
-                if (this.field.count < this.field.stateHistory.length - 1) {
-                    const stackData = this.field.stateHistory[this.field.count];
-                    const output = this.field.outputsHistory[this.field.count];
+                ++this.count;
+                if (this.count < this.stateHistory.length - 1) {
+                    const stackData = this.stateHistory[this.count];
+                    const output = this.outputsHistory[this.count];
                     const ret = {
                         "stackData": stackData,
-                        "debugState": `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`,
+                        "debugState": `Step:${this.count} | Value:${stackData.getCurrentValue()}`,
                         "output": output,
                         "sourcetext": sourcetext
                     };
                     return ret;
                 } else if (this.isExecuting) {
-                    if (this.field.engine.getIsWaitingForStdin()) {
+                    if (this.engine.getIsWaitingForStdin()) {
                         const stdinText = obj["stdinText"];
-                        this.field.engine.stdin(stdinText);
+                        this.engine.stdin(stdinText);
+                        console.log(`stdin:${stdinText}`);
                     }
-                    let state = this.field.engine.stepExecute();
+                    let state = this.engine.stepExecute();
                     let maxSkip = 10;
                     while (state.getCurrentExpr().codeRange == null && 0 < --maxSkip) {
-                        state = this.field.engine.stepExecute();
+                        state = this.engine.stepExecute();
                     }
                     const stackData = this.recordExecState(state);
-                    const stdout = this.field.engine.getStdout();
+                    const stdout = this.engine.getStdout();
+                    console.log(`stdout:${stdout}`);
                     const output = this.recordOutputText(stdout);
-                    let stateText = `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`;
-                    if (this.field.engine.getIsWaitingForStdin()) {
+                    console.log(`output:${output}`);
+                    let stateText = `Step:${this.count} | Value:${stackData.getCurrentValue()}`;
+                    if (this.engine.getIsWaitingForStdin()) {
                         stateText = "scanf";
-                    } else if (!this.field.engine.isStepExecutionRunning()) {
+                    } else if (!this.engine.isStepExecutionRunning()) {
                         stateText = "EOF";
                         this.isExecuting = false;
                         ResetAllFileList(this.files);
@@ -176,7 +157,7 @@ class Server {
                     };
                     return ret;
                 } else {
-                    this.field.count = this.field.stateHistory.length - 1
+                    this.count = this.stateHistory.length - 1
                     const ret = {
                         "stackData": this.getLastHistory(),
                         "debugState": "EOF",
@@ -187,21 +168,21 @@ class Server {
                 }
             }
             case "back": {
-                if (1 <= this.field.count) {
-                    this.field.count -= 1
+                if (1 <= this.count) {
+                    this.count -= 1
                 }
-                const stackData = this.field.stateHistory[this.field.count];
-                const output = this.field.outputsHistory[this.field.count];
+                const stackData = this.stateHistory[this.count];
+                const output = this.outputsHistory[this.count];
                 const ret = {
                     "stackData": stackData,
-                    "debugState": `Step:${this.field.count} | Value:${stackData.getCurrentValue()}`,
+                    "debugState": `Step:${this.count} | Value:${stackData.getCurrentValue()}`,
                     "output": output,
                     "sourcetext": sourcetext
                 };
                 return ret;
             }
             case "stop": {
-                this.field.engine = null
+                this.engine = null
                 const ret = {
                     "stackData": this.getLastHistory(),
                     "debugState": "STOP",
@@ -221,11 +202,8 @@ class Server {
     }
 
     resetEngine() {
-        this.field = new Field();
-        this.field.engine.setFileList(this.files);
-        // this.field.engine.setFileDir(this.getUserDir());
-        // this.field.engine.out = new PrintStream(this.field.baos);
-        return this.field;
+        this.reset();        
+        this.engine.setFileList(this.files);
     }
     //                 public getUUIDfromSession(session: Session): String {
     //                 let uuid = java.util.UUID.randomUUID().toString();
@@ -240,17 +218,21 @@ class Server {
     //             }
 
     recordOutputText(output) {
-        this.field.outputsHistory.push(output);
+        this.outputsHistory.push(output);
         return output;
     }
 
+    getLastOutputText() {
+        return this.outputsHistory[this.outputsHistory.length-1];
+    }
+
     recordExecState(execState) {
-        this.field.stateHistory.push(execState);
+        this.stateHistory.push(execState);
         return execState;
     }
 
     getLastHistory() {
-        return this.field.stateHistory[this.field.stateHistory.length - 1];
+        return this.stateHistory[this.stateHistory.length - 1];
     }
 }
 

@@ -12,32 +12,32 @@ export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
     outputEditor.setTheme("ace/theme/terminal");
     const id = '#' + idName
     $(id).on('keydown', function () {
-        if (window.GlobalStorage.isScanf == "true") {
+        if (window.GlobalStorage.isScanf === true) {
             outputEditor.setReadOnly(false);
         }
     });
     $(id).on('keyup', function (e) {
-        const isDuringScanf = window.GlobalStorage.isScanf == "true";
+        const isDuringScanf = window.GlobalStorage.isScanf === true;
         if (!isDuringScanf) {
             outputEditor.setReadOnly(true);
         }
         const enterKeyCode = 13;
         if (e.keyCode == enterKeyCode && isDuringScanf) {
-            let text = outputEditor.getValue();
-            text = text.substr(0, text.length - 1);//改行文字削除
-            const pos = text.lastIndexOf('\n');
-            text = text.substr(pos + 1);
+            let stdinText = outputEditor.getValue();
+            stdinText = stdinText.substr(0, stdinText.length - 1);//改行文字削除
+            stdinText = stdinText.replace(server.getLastOutputText(), '');
             const jsondata = { //送りたいJSONデータ
                 "stackData": "",
                 "debugState": "step",
                 "output": "",
                 "sourcetext": "",
-                "stdinText": text
+                stdinText
             };
-            window.GlobalStorage.isScanf = "false";
+            window.GlobalStorage.isScanf = false;
             send(jsondata, sourceCodeEditor);
         }
     });
+
     outputEditor.setValue(text, 1);
     return outputEditor;
 }
@@ -84,11 +84,11 @@ export const createEditor = (idName, canWrite, initText) => {
                 };
                 send(jsondata, sourceCodeEditor);
                 window.GlobalStorage.line = 0;
-                window.GlobalStorage.debug = "true";
+                window.GlobalStorage.debug = true;
             }
         });
         $('#reset').click(function () {
-            if (window.GlobalStorage.debug == "true") {
+            if (window.GlobalStorage.debug == true) {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "reset",
@@ -102,7 +102,7 @@ export const createEditor = (idName, canWrite, initText) => {
             }
         });
         $('#exec').click(function () {
-            if (window.GlobalStorage.debug == "true") {
+            if (window.GlobalStorage.debug == true) {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "exec",
@@ -117,7 +117,7 @@ export const createEditor = (idName, canWrite, initText) => {
         });
 
         $('#step').click(function () {
-            if (window.GlobalStorage.debug == "true") {
+            if (window.GlobalStorage.debug == true) {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "step",
@@ -131,7 +131,7 @@ export const createEditor = (idName, canWrite, initText) => {
             }
         });
         $('#back').click(function () {
-            if (window.GlobalStorage.debug == "true") {
+            if (window.GlobalStorage.debug == true) {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "back",
@@ -146,7 +146,7 @@ export const createEditor = (idName, canWrite, initText) => {
 
         });
         $('#stop').click(function () {
-            if (window.GlobalStorage.debug == "true") {
+            if (window.GlobalStorage.debug == true) {
                 const jsondata = { //送りたいJSONデータ
                     "stackData": "",
                     "debugState": "stop",
@@ -155,7 +155,7 @@ export const createEditor = (idName, canWrite, initText) => {
                 };
                 send(jsondata, sourceCodeEditor);
                 CanvarDrawer.clearMemoryState();
-                window.GlobalStorage.debug = "false";
+                window.GlobalStorage.debug = false;
                 window.GlobalStorage.line = 0;
             }
             else {
@@ -174,8 +174,7 @@ const drawVisualizedResult = (jsondata, editor) => {
     const treeObj = treeJson;
     const data = new Array(treeObj);
 
-    if (window.GlobalStorage.debug != "true") {
-    } else {
+    if (window.GlobalStorage.debug == true) {
         // document.getElementById("exstart").disabled = "true";
         require('ace-min-noconflict');
         const Range = ace.require("ace/range").Range;
@@ -211,7 +210,7 @@ const send = (jsondata, editor) => {
         }).then((ret) => {
             document.getElementById("debugStatus").innerHTML = "DebugStatus:" + ret.debugState;
             if (ret.debugState == "scanf") {
-                window.GlobalStorage.isScanf = "true";
+                window.GlobalStorage.isScanf = true;
             }
             drawVisualizedResult(ret, editor);
         }).catch((e) => {
