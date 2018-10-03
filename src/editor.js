@@ -45,14 +45,15 @@ export const createEditor = (idName, canWrite, initText) => {
     require('ace-min-noconflict');
     require('ace-min-noconflict/mode-c_cpp');
     require('ace-min-noconflict/theme-monokai');
+    require('ace-min-noconflict/ext-language_tools');
     const sourceCodeEditor = ace.edit(idName);
     if (canWrite) {
         sourceCodeEditor.$blockScrolling = Infinity;
-        // sourceCodeEditor.setOptions({
-        //     enableBasicAutocompletion: true,//基本的な自動補完
-        //     enableSnippets: true,//スニペット
-        //     enableLiveAutocompletion: true//ライブ補完
-        // });
+        sourceCodeEditor.setOptions({
+            enableBasicAutocompletion: true,//基本的な自動補完
+            enableSnippets: true,//スニペット
+            enableLiveAutocompletion: true//ライブ補完
+        });
     }
     sourceCodeEditor.setTheme("ace/theme/monokai");
     sourceCodeEditor.getSession().setMode("ace/mode/c_cpp");//シンタックスハイライトと自動補完
