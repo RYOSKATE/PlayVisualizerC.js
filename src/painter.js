@@ -33,7 +33,7 @@ export class CanvarDrawer {
         }        
         
         //アドレスから矢印描画
-        const arrowDrawer = new ArrowDrawer(stacks);
+        const arrowDrawer = new ArrowDrawer(stacks, data.global);
         arrowDrawer.drawAllPtrArrow(stacks);
         
         $.jCanvas.defaults.drag = arrowDrawer.onDrag; // Dragされた
@@ -254,8 +254,9 @@ class Arrow {
 }
 
 class ArrowDrawer {
-    constructor(stacks){
+    constructor(stacks, global){
         this.stacks = stacks;
+        this.global = global;
         this.colorHashMap = {};
         this.arrowColorSet = new ArrowColorSet();
 
@@ -294,7 +295,8 @@ class ArrowDrawer {
     
     drawPtrArrow (baseStack, baseVariables) {
         for (const baseVariable of baseVariables) {
-            const isTypePtr = (baseVariable.type.indexOf('*') != -1);
+            const rawType = this.global.getTypedef(baseVariable.type);
+            const isTypePtr = (rawType.indexOf('*') != -1);
             if (isTypePtr || baseVariable.value instanceof Array) {
                 const fromArrow = new Arrow(baseStack, baseVariable, 'value');
 
