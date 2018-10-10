@@ -194,8 +194,21 @@ const drawVisualizedResult = (jsondata, editor) => {
     }
     // const nextLineEditOutput = jsondata.output.replace(/\\n/g, '\n');
     createConsoleEditor('output', jsondata.output);
+    
     const canvasDrawer = new CanvarDrawer();
+    
+    $('#canvasScaleRange').change(() => { 
+      const value = $('#canvasScaleRange').val();
+      const scale = Number(value);   
+      $('#canvasScaleRangeVal').text(scale);
+      canvasDrawer.rescale(scale);
+    });
+
+    const value = $('#canvasScaleRange').val();
+    const scale = Number(value);   
+    $('#canvasScaleRangeVal').text(scale);
     canvasDrawer.drawMemoryState(d);
+    canvasDrawer.rescale(scale);
   }
 };
 
