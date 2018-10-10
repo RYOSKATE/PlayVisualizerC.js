@@ -114,7 +114,7 @@ class Server {
       }
       case 'step': {
         ++this.count;
-        if (this.count < this.stateHistory.length - 1) {
+        if (this.count < this.stateHistory.length) {
           const stackData = this.stateHistory[this.count];
           const output = this.outputsHistory[this.count];
           const ret = {
