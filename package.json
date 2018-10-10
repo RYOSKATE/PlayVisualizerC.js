@@ -67,7 +67,7 @@
   "pre-commit": "precommit",
   "post-commit": "postcommit",
   "lint-staged": {
-    "*.{js,json}": [
+    "*.{js}": [
       "prettier --write",
       "eslint --fix",
       "git add"
