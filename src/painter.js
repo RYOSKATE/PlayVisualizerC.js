@@ -29,13 +29,14 @@ export class CanvarDrawer {
     let nextPos = origin.clone(); //次のRectの左上の位置
 
     const stacks = data.stacks;
+    const global = data.global;
     for (const stack of stacks) {
-      const stackDrawer = new StackDrawer(stack, nextPos);
+      const stackDrawer = new StackDrawer(stack, global, nextPos);
       nextPos = stackDrawer.drawStack();
     }
 
     //アドレスから矢印描画
-    const arrowDrawer = new ArrowDrawer(stacks, data.global, 1.0);
+    const arrowDrawer = new ArrowDrawer(stacks, global, 1.0);
     arrowDrawer.drawAllPtrArrow(stacks);
     $.jCanvas.defaults.drag = arrowDrawer.onDrag; // Dragされた
     $('canvas')
@@ -66,10 +67,11 @@ export class CanvarDrawer {
 }
 
 class StackDrawer {
-  constructor(stack, nextPos) {
+  constructor(stack, global, nextPos) {
     this.nextPos = nextPos;
     this.pos = nextPos.clone(); //次の変数の左上の位置
     this.stack = stack;
+    this.global = global;
     this.memoryName = stack.name; //nameはその関数名など
     this.heightOffset = 25;
     this.borderHeight = 25;
@@ -157,10 +159,11 @@ class StackDrawer {
         value = '0x' + v.value[0].address.toString(16);
         address = 'SYSTEM';
       }
+      const rawType = this.global.getTypedef(v.type);
       if (~v.type.indexOf('*') && v.value != null) {
         value = '0x' + value.toString(16);
       }
-      if (v.type === 'char' && value != null) {
+      if (rawType === 'char' && value != null) {
         value += ` '${String.fromCharCode(value)}'`;
       }
 
