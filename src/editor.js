@@ -55,18 +55,31 @@ export const createEditor = (idName, canWrite, initText) => {
       enableSnippets: true, //スニペット
       enableLiveAutocompletion: true, //ライブ補完
     });
-  }
-  sourceCodeEditor.setTheme('ace/theme/monokai');
-  sourceCodeEditor.getSession().setMode('ace/mode/c_cpp'); //シンタックスハイライトと自動補完
-  //sourceCodeEditor.getSession().setUseWrapMode(true);//true:折り返し、false:横スクロールバー
 
-  $('#font-size').click(function(e) {
-    sourceCodeEditor.setFontSize($(e.target).data('size'));
-  });
+    let lineNumOfBreakpoint = [];
 
-  sourceCodeEditor.setReadOnly(!canWrite);
+    sourceCodeEditor.on("guttermousedown", (e) => {
+      const target = e.domEvent.target; 
+      if (target.className.indexOf("ace_gutter-cell") == -1) 
+          return; 
+      if (!sourceCodeEditor.isFocused()) 
+          return; 
+      if (e.clientX > 25 + target.getBoundingClientRect().left) 
+          return; 
 
-  if (canWrite) {
+      const row = e.getDocumentPosition().row;
+
+      if( lineNumOfBreakpoint.includes(row) ) {
+          e.editor.session.clearBreakpoint(row);
+          lineNumOfBreakpoint = lineNumOfBreakpoint.filter(n => n !== row);
+      } else{
+          e.editor.session.setBreakpoint(row) ;
+          lineNumOfBreakpoint.push(row);
+      } 
+      e.stop() ;
+    });
+
+    
     const showNotDebuggingMsg = () => {
       alert('デバッグ開始ボタンを押してください');
       CanvarDrawer.clearMemoryState();
@@ -111,6 +124,7 @@ export const createEditor = (idName, canWrite, initText) => {
           debugState: 'exec',
           output: '',
           sourcetext: sourceCodeEditor.getValue(),
+          lineNumOfBreakpoint,
         };
         send(jsondata, sourceCodeEditor);
       } else {
@@ -164,6 +178,15 @@ export const createEditor = (idName, canWrite, initText) => {
       }
     });
   }
+  sourceCodeEditor.setTheme('ace/theme/monokai');
+  sourceCodeEditor.getSession().setMode('ace/mode/c_cpp'); //シンタックスハイライトと自動補完
+  //sourceCodeEditor.getSession().setUseWrapMode(true);//true:折り返し、false:横スクロールバー
+
+  $('#font-size').click(function(e) {
+    sourceCodeEditor.setFontSize($(e.target).data('size'));
+  });
+
+  sourceCodeEditor.setReadOnly(!canWrite);
 
   if (initText != '') sourceCodeEditor.setValue(initText, -1);
   return sourceCodeEditor;

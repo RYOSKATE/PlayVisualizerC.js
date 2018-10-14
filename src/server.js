@@ -93,10 +93,15 @@ class Server {
           output: output,
           sourcetext: sourcetext,
         };
+        const lineNumOfBreakpoint = obj['lineNumOfBreakpoint'];
         let ret;
         do {
           ret = this.ajaxCall(json);
           if (ret == null || ret == undefined) break;
+          const codeRange = ret.stackData.nextExpr.codeRange;
+          if(lineNumOfBreakpoint.includes(codeRange.begin.y - 1)) {
+            break;
+          }
         } while (ret.debugState != 'EOF' && ret.debugState != 'stdin');
         return ret;
       }
