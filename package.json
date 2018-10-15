@@ -6,7 +6,7 @@
   "scripts": {
     "ts-lint": "tslint --fix 'src/**/*.ts'",
     "es-lint": "eslint --fix src/**/*.js",
-    "build": "yarn es-lint && yarn ts-lint && gulp",
+    "build": "gulp",
     "watch": "gulp watch",
     "serve": "gulp serve",
     "serve:dist": "gulp serve:dist",

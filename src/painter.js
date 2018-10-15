@@ -20,43 +20,58 @@ export class CanvarDrawer {
     $.jCanvas.defaults.fromCenter = false; //座標を図形の中央ではなく左上に
     $.jCanvas.defaults.layer = true; //図形のレイヤー処理を有効化(グループ処理)
     $('canvas')
-      .setLayer('mainLayer', {
-        visible: false, //高速化・ちらつき防止のため最終的な状態になるまで描画しない
-      })
-      .drawLayers();
+    .setLayer('mainLayer', {
+      visible: false, //高速化・ちらつき防止のため最終的な状態になるまで描画しない
+    })
+    .drawLayers();
 
     const origin = new Victor(50, 50); //図形描画の基準位置
     let nextPos = origin.clone(); //次のRectの左上の位置
 
     const stacks = data.stacks;
+    const global = data.global;
     for (const stack of stacks) {
-      const stackDrawer = new StackDrawer(stack, nextPos);
+      const stackDrawer = new StackDrawer(stack, global, nextPos);
       nextPos = stackDrawer.drawStack();
     }
 
     //アドレスから矢印描画
-    const arrowDrawer = new ArrowDrawer(stacks, data.global);
+    const arrowDrawer = new ArrowDrawer(stacks, global, 1.0);
     arrowDrawer.drawAllPtrArrow(stacks);
-
     $.jCanvas.defaults.drag = arrowDrawer.onDrag; // Dragされた
     $('canvas')
       .getLayers()
       .reverse(); //スタックのRectが最前面になり内側に対するマウスイベントを全て全て受け取ってしまう。
-    $('canvas')
-      .setLayer('mainLayer', {
-        visible: true, //ここまでの処理が終わって初めて描画する
-      })
-      .drawLayers();
 
+    $('canvas').setLayer('mainLayer', {
+      visible: true, //ここまでの処理が終わって初めて描画する
+    })
+    .drawLayers();
+      
     return data;
+  }
+
+  rescale(scale) {
+    $('canvas')
+    .scaleCanvas({
+      name: "scaleLayer",
+      layer: true,
+      scale
+    }).drawLayers({
+      complete: function () {
+        $('canvas').restoreCanvas({name: "restore1",layer: true});
+      }
+    })
+    .restoreCanvas({name: "restore2",layer: true});
   }
 }
 
 class StackDrawer {
-  constructor(stack, nextPos) {
+  constructor(stack, global, nextPos) {
     this.nextPos = nextPos;
     this.pos = nextPos.clone(); //次の変数の左上の位置
     this.stack = stack;
+    this.global = global;
     this.memoryName = stack.name; //nameはその関数名など
     this.heightOffset = 25;
     this.borderHeight = 25;
@@ -144,10 +159,11 @@ class StackDrawer {
         value = '0x' + v.value[0].address.toString(16);
         address = 'SYSTEM';
       }
+      const rawType = this.global.getTypedef(v.type);
       if (~v.type.indexOf('*') && v.value != null) {
         value = '0x' + value.toString(16);
       }
-      if (v.type === 'char' && value != null) {
+      if (rawType === 'char' && value != null) {
         value += ` '${String.fromCharCode(value)}'`;
       }
 
@@ -266,11 +282,12 @@ class Arrow {
 }
 
 class ArrowDrawer {
-  constructor(stacks, global) {
+  constructor(stacks, global, scale) {
     this.stacks = stacks;
     this.global = global;
     this.colorHashMap = {};
     this.arrowColorSet = new ArrowColorSet();
+    this.scale = scale;
 
     this.onDrag = () => {
       const layers = $('canvas').getLayers();

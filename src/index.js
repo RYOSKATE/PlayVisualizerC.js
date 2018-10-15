@@ -72,15 +72,15 @@ window.addEventListener(
   'load',
   () => {
     const container = document.getElementById('canvasContainer');
-    const canvas1 = document.getElementById('display');
+    const mainCanvas = document.getElementById('display');
     // const editorMain = document.getElementById("editorMain");
     let queue = null;
     let wait = 300;
 
     // Canvasサイズをコンテナの100%に
     const setCanvasSize = () => {
-      canvas1.width = 0.97 * container.offsetWidth;
-      canvas1.height = 0.95 * window.innerHeight;
+      mainCanvas.width = 0.97 * container.offsetWidth;
+      mainCanvas.height = 0.95 * window.innerHeight;
 
       // const height = $(window).height() - 180;
       // $("#editorMain").css("height", 0.8 * Math.max(height, 500) + "px");
