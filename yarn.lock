@@ -7427,10 +7427,10 @@ undertaker@^1.0.0:
     object.reduce "^1.0.0"
     undertaker-registry "^1.0.0"
 
-unicoen.ts@0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/unicoen.ts/-/unicoen.ts-0.1.8.tgz#a158089515ffe742e5987b8c66f0a7e28717a9eb"
-  integrity sha512-WiuA8DBQUNxmsoSEagRH5uoVGIFlycmI4/VJMD2wIM2c9b1iAnKex4KUYL8bBOBIBVpybMXRr0+GGcY2/nRAVg==
+unicoen.ts@0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/unicoen.ts/-/unicoen.ts-0.1.9.tgz#e49e2cb81c513864749907eddb67f3f8e989865d"
+  integrity sha512-BvqbWTEl72HY862B2h0EckCInm6nF+rmB4jdXmOWcDiBass/8whrS8Ufl6cuSdq9oroXiJPb0jYWNkIwx/QHWQ==
   dependencies:
     "@types/mathjs" "^4.4.0"
     "@types/node" "^9.6.32"
