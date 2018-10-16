@@ -344,7 +344,7 @@ class ArrowDrawer {
 
   drawPtrArrow2(baseStack, targetStack, baseVariable, targetVariables, fromArrow) {
     for (const targetVariable of targetVariables) {
-      console.log(`${targetVariable.name}, ${baseVariable.name}`);
+      //console.log(`${targetVariable.name}, ${baseVariable.name}`);
       const isArrayNamePtr =
         baseVariable.value instanceof Array && targetVariable.name == `${baseVariable.name}[0]`;
       if (isArrayNamePtr || targetVariable.address == baseVariable.value) {
@@ -374,7 +374,7 @@ class ArrowDrawer {
   }
 
   calcMidPos(fromArrow, toArrow) {
-    console.log(`${fromArrow}, ${toArrow}`);
+    //console.log(`${fromArrow}, ${toArrow}`);
     const mid = new Victor(
       (fromArrow.pos.x + toArrow.pos.x) / 2,
       (fromArrow.pos.y + toArrow.pos.y) / 2,

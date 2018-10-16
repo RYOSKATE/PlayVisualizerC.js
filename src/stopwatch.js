@@ -8,7 +8,7 @@ export default class Stopwatch {
         this.results = results;
         this.laps = [];
         this.reset();
-        this.print(this.times);
+        //this.print(this.times);
     }
 
     reset() {
@@ -82,6 +82,7 @@ export default class Stopwatch {
     print() {
         this.display.innerText = this.format(this.times);
     }
+
     pad0(num) {
         return ('00' + num).slice(-2);
     };

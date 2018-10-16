@@ -133,7 +133,7 @@ class Server {
           if (this.engine.getIsWaitingForStdin()) {
             const stdinText = obj['stdinText'];
             this.engine.stdin(stdinText);
-            console.log(`stdin:${stdinText}`);
+            //console.log(`stdin:${stdinText}`);
           }
           let state = this.engine.stepExecute();
           let maxSkip = 10;
@@ -142,9 +142,9 @@ class Server {
           }
           const stackData = this.recordExecState(state);
           const stdout = this.engine.getStdout();
-          console.log(`stdout:${stdout}`);
+          //console.log(`stdout:${stdout}`);
           const output = this.recordOutputText(stdout);
-          console.log(`output:${output}`);
+          //console.log(`output:${output}`);
           let stateText = `Step:${this.count} | Value:${stackData.getCurrentValue()}`;
           if (this.engine.getIsWaitingForStdin()) {
             stateText = 'stdin';
