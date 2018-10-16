@@ -100,6 +100,11 @@ export const createEditor = (idName, canWrite, initText) => {
         send(jsondata, sourceCodeEditor);
         window.GlobalStorage.line = 0;
         window.GlobalStorage.debug = true;
+        $("#stop").prop("disabled", false);
+        $("#reset").prop("disabled", false);
+        $("#back").prop("disabled", false);
+        $("#step").prop("disabled", false);
+        $("#exec").prop("disabled", false);
       }
     });
     $('#reset').click(function() {
@@ -112,6 +117,8 @@ export const createEditor = (idName, canWrite, initText) => {
           sourcetext: sourceCodeEditor.getValue(),
         };
         send(jsondata, sourceCodeEditor);
+        $("#reset").prop("disabled", true);
+        $("#back").prop("disabled",  true);
       } else {
         showNotDebuggingMsg();
       }
@@ -173,6 +180,12 @@ export const createEditor = (idName, canWrite, initText) => {
         CanvarDrawer.clearMemoryState();
         window.GlobalStorage.debug = false;
         window.GlobalStorage.line = 0;
+
+        $("#stop").prop("disabled", true);
+        $("#reset").prop("disabled", true);
+        $("#back").prop("disabled", true);
+        $("#step").prop("disabled", true);
+        $("#exec").prop("disabled", true);
       } else {
         showNotDebuggingMsg();
       }
@@ -203,7 +216,15 @@ const drawVisualizedResult = (jsondata, editor) => {
     const Range = ace.require('ace/range').Range;
     const d = data[0];
     const codeRange = d.nextExpr.codeRange;
-    if (jsondata.debugState == 'EOF') {
+
+    const step = jsondata.step;
+    $("#reset").prop("disabled", step <= 0);
+    $("#back").prop("disabled",  step <= 0);
+
+    const isEOF = jsondata.debugState === 'EOF';
+    $("#step").prop("disabled", isEOF);
+    $("#exec").prop("disabled", isEOF);
+    if (isEOF) {
       const range = new Range(new Number(-1), new Number(0), new Number(-1), new Number(1));
       editor.getSelection().setSelectionRange(range);
     } else if (codeRange) {

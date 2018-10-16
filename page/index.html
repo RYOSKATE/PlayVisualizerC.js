@@ -98,30 +98,36 @@
                                             </li>
                                         </ul>
                                     </div>
+
+                                    <!-- コンパイル済みならデバッグ開始-->
                                     <button id="debug" title="可視化デバッグ実行開始(最初に1回必ず押す)" class="btn btn-default">
                                         <i class="glyphicon glyphicon-play"></i>
                                     </button>
-                                    <!-- コンパイル済みならデバッグ開始-->
-                                    <button id="stop" title="可視化デバッグ終了" class="btn btn-default">
+
+                                    <!-- デバッグ中なら停止-->
+                                    <button id="stop" title="可視化デバッグ終了" class="btn btn-default" disabled>
                                         <i class="glyphicon glyphicon-stop"></i>
                                     </button>
-                                    <!-- デバッグ中なら停止-->
-                                    <button id="reset" title="実行中のプログラムを最初に戻す" class="btn btn-default">
+
+                                    <!-- コンパイル済みならデバッグ開始-->
+                                    <button id="reset" title="実行中のプログラムを最初に戻す" class="btn btn-default" disabled>
                                         <i class="glyphicon glyphicon-backward"></i>
                                     </button>
-                                    <!-- コンパイル済みならデバッグ開始-->
-                                    <button id="back" title="前の式に戻る" class="btn btn-default">
+
+                                    <!-- デバッグ開始済みなら1ステップ戻る-->
+                                    <button id="back" title="前の式に戻る" class="btn btn-default" disabled>
                                         <i class="glyphicon glyphicon-arrow-left"></i>
                                     </button>
-                                    <!-- デバッグ開始済みなら1ステップ戻る-->
-                                    <button id="step" title="次の式を実行する(次に実行する式をハイライト)" class="btn btn-default">
+
+                                    <!-- デバッグ開始済みなら1ステップ進む-->
+                                    <button id="step" title="次の式を実行する(次に実行する式をハイライト)" class="btn btn-default" disabled>
                                         <i class="glyphicon glyphicon-arrow-right"></i>
                                     </button>
-                                    <!-- デバッグ開始済みなら1ステップ進む-->
-                                    <button id="exec" title="実行中のプログラムを最後まで実行する" class="btn btn-default">
+
+                                    <!-- コンパイル済みなら実行-->                                    
+                                    <button id="exec" title="実行中のプログラムを最後まで実行する" class="btn btn-default" disabled>
                                         <i class="glyphicon glyphicon-forward"></i>
                                     </button>
-                                    <!-- コンパイル済みなら実行-->
                                 </div>
                             </div>
                             <div id="debugStatus" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">DebugStatus:</div>
