@@ -22,6 +22,6 @@ function reloadBrowserSync(cb) {
 }
 
 function watch(done) {
-  gulp.watch(conf.path.tmp('index.html'), reloadBrowserSync);
+  gulp.watch([conf.path.tmp('index.html'),conf.path.tmp('experiment/home.html')], reloadBrowserSync);
   done();
 }

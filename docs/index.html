@@ -17,6 +17,11 @@
     <script src="js/jcanvas.min.js" type="text/javascript"></script>
     <script src="js/victor.min.js" type="text/javascript"></script>
     <script src="js/toggles.min.js" type="text/javascript"></script>
+    <script>
+        if(typeof localStorage.index === 'undefined') {
+            location.href='./experiment/home.html';
+        }
+    </script>
 </head>
 
 <body>
@@ -28,53 +33,17 @@
                     <div id="menu" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <!--言語と使い方とコントローラ -->
                         <div class="row">
-                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <!--言語と使い方 -->
                                 <div class="row">
-                                    <div class="col-lg-12 col-md-3 col-sm-3 col-xs-3">
-                                        <div id="language-swicher" class="toggle-light"></div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
+                                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6">
                                         <a href="#popup1" class="popup_btn jp">使い方</a>
-                                        <a href="#popup1" class="popup_btn en">How to use</a>
-                                        <div id="popup1" class="popup">
-                                            <div class="popup_inner jp">
-                                                <h4>使い方</h4>
-                                                <p>下のエディタにプログラムを書き、上のボタンを押すことで可視化実行ができます。</p>
-                                                <p>(マウスカーソルを重ねるとで各ボタンの説明が表示されます。)</p>
-                                                <p>実験前にデフォルトで表示されているプログラムをステップ実行して、</p>
-                                                <p>どう可視化されるか確認してみてください。</p>
-                                                <p>十分に確認できたらページ下部のボタンでトップページに戻れます。</p>
-                                                <p>実験1,2,3,4を順に実施してください。</p>
-                                                <p>もしExecution exceptionと書いてある真っ赤な画面になったらごめんなさい。</p>
-                                                <p>ツールのバグです。ブラウザの戻るボタンを押してください。</p>
-                                                <div>
-                                                    <a href="#close_btn" class="close_btn">閉じる</a>
-                                                </div>
-                                            </div>
-                                            <div class="popup_inner en">
-                                                <h4> How to use </h4>
-                                                <p> PVC.js has five GUI components: (1) editor, (2) execution controller
-                                                    buttons, (3) I/O window, (4) canvas for visualization, and (5) file upload
-                                                    form.
-                                                </p>
-                                                <p>Users can write source code in the editor. Clicking on the execution control
-                                                    buttons initiates the step execution. The I/O window shows the content
-                                                    of the standard output written by the program (e.g., printf) and accepts
-                                                    standard input (e.g., scanf). Canvas shows the program's execution status
-                                                    using tables and figures.</p>
-                                                <p>PVC.js adaptively changes its layout to correspond with the size of the
-                                                    browser window.
-                                                </p>
-                                                <div>
-                                                    <a href="#close_btn" class="close_btn">Close</a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <a href="#popup1" class="popup_btn en">How to use</a>                                        
                                     </div>
+                                    <a href="./experiment/home.html" class="col-lg-8 col-md-6 col-sm-6 col-xs-6">トップページへ戻る</a><br>
                                 </div>
                             </div>
-                            <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <!--コントローラボタン -->
                                 <div id="overlay"></div>
                                 <div class="btn-group">
@@ -125,8 +94,14 @@
                                 </div>
                             </div>
                             <div id="debugStatus" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">DebugStatus:</div>
+                            <br>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
+                                <button id="exstart" >実験開始</button>
+                                <button id="exans">答えを確認</button>
+                            <br>
                         </div>
                     </div>
+                    <div id="description" class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div id="editorMain"></div>
                     </div>
@@ -171,6 +146,40 @@
                         <canvas id="display"></canvas>
                     </div>
                 </div>                
+            </div>
+            <div id="popup1" class="popup">
+                <div class="popup_inner jp">
+                    <h4>使い方</h4>
+                    <p>左のエディタにプログラムを書き、上に並ぶボタンを押すことで可視化実行できます。</p>
+                    <p>(マウスカーソルを重ねるとで各ボタンの説明が表示されます。)</p>
+                    <p>実験前にデフォルトで表示されているプログラムをステップ実行して、</p>
+                    <p>どう可視化されるか確認してみてください。</p>
+                    <p>十分に確認できたらページ下部のボタンでトップページに戻れます。</p>
+                    <p>実験1,2,3,4を順に実施してください。</p>
+                    <p>もしExecution exceptionと書いてある真っ赤な画面になったらごめんなさい。</p>
+                    <p>ツールのバグです。ブラウザの戻るボタンを押してください。</p>
+                    <div>
+                        <a href="#close_btn" class="close_btn">閉じる</a>
+                    </div>
+                </div>
+                <div class="popup_inner en">
+                    <h4> How to use </h4>
+                    <p> PVC.js has five GUI components: (1) editor, (2) execution controller
+                        buttons, (3) I/O window, (4) canvas for visualization, and (5) file upload
+                        form.
+                    </p>
+                    <p>Users can write source code in the editor. Clicking on the execution control
+                        buttons initiates the step execution. The I/O window shows the content
+                        of the standard output written by the program (e.g., printf) and accepts
+                        standard input (e.g., scanf). Canvas shows the program's execution status
+                        using tables and figures.</p>
+                    <p>PVC.js adaptively changes its layout to correspond with the size of the
+                        browser window.
+                    </p>
+                    <div>
+                        <a href="#close_btn" class="close_btn">Close</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

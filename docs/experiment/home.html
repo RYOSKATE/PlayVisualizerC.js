@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>PlayVisualizerC.js</title>
+</head>
+
+<body>
+<br>
+
+<input type="button" onClick="movePage(0)" value="visualizerデモページへ">
+    <br>
+
+    初めにデモページで本ツールの基本的な機能について理解し、<br>
+    その後、以下の実験用ページ1,2,3,4で問題を解いてください。<br>
+
+    「回答にかかった時間」「正解・不正解」が調査対象です。<br>
+    用紙にメモして報告してください。<br>
+    <hr>
+    <input type="button" onClick="movePage(1)" value="experiment1へ">
+    <br>
+    <br>
+    <input type="button" onClick="movePage(2)" value="experiment2へ">
+    <br>
+    <br>
+    <input type="button" onClick="movePage(3)" value="experiment3へ">
+    <br>
+    <br>
+    <input type="button" onClick="movePage(4)" value="experiment4へ">
+    <br>
+    <br>
+</body>
+<script>
+function movePage(index) {
+    localStorage.index = index;
+    location.href='../index.html';
+}
+</script>
+</html>

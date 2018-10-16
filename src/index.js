@@ -1,6 +1,7 @@
 import { createConsoleEditor, createEditor } from './editor';
 import { file_upload } from './file';
 import showLanguage from './language';
+import {ex, setEditorAndExperiment} from './experiment';
 
 window.GlobalStorage = { isStdin: false, line: 0, debug: false, lang: 'jp' };
 
@@ -15,31 +16,41 @@ int recursiveToThree(int n){
     return n;
 }
 int main(){
-    int n = 0;//example of variable declaration
+    int n = 0;//variable declaration
 
-    n = recursiveToThree(0);//example of recursive function
+    n = recursiveToThree(0);//recursive function
 
-    int arr[5] = {1, 2, 3};//example of array variable
+    int arr[5] = {1, 2, 3};//array variable
 
-    int* ptr = &arr[2];//example of pointer variable
+    int* ptr = &arr[2];//pointer variable
     *ptr = 5;
 
-    //example of dynamic memory allocation
+    //dynamic memory allocation
     int* d_arry = malloc(sizeof(int) * 3);
 
-    //example of two-dimensional dynamic array
+    //two-dimensional dynamic array
     int* pd_arr[2];
     pd_arr[0] = malloc(sizeof(int) * 2);
     pd_arr[1] = malloc(sizeof(int) * 2);
 
-    printf("Hello,world!\n");//example of standard output
+    printf("Hello,world!\n");//standard output
 
-    //example of memory leak
+    //memory leak
     free(pd_arr[0]);
     return 0;
 }`;
-const editor = createEditor('editorMain', true, defaultSourceCode);
-/*const consolEditor =*/ createConsoleEditor('output', '', editor);
+
+const index = Number(localStorage.index);
+localStorage.removeItem('index');
+
+if(index === 0){
+  const editor = createEditor('editorMain', true, defaultSourceCode );
+  createConsoleEditor('output', '', editor);
+} else {
+  const editor = createEditor('editorMain', true, '');
+  createConsoleEditor('output', '', editor);
+  setEditorAndExperiment(index, ex[index-1], editor);
+}
 
 // ファイルアップロード時の処理
 document.getElementById('files').addEventListener('change', file_upload, false);
@@ -109,6 +120,7 @@ window.addEventListener(
 // 日本語と英語の切り替え
 $('#language-swicher').toggles({
   text: { on: '日本語', off: 'English' },
+  on: true
 });
 $('#language-swicher').on('toggle', (e, active) => {
   if (active) {
@@ -118,4 +130,4 @@ $('#language-swicher').on('toggle', (e, active) => {
   }
 });
 
-showLanguage('en'); // デフォルトの言語
+showLanguage('jp'); // デフォルトの言語

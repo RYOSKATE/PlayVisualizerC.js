@@ -9,16 +9,20 @@
     height: 14vh;
 }
 
+#description {
+    height: 30vh;
+}
+
 #editorMain {
-    height: 53vh;
+    height: 73vh;
 }
 
 #output {
-    height: 18vh;
+    height: 10vh;
 }
 
 #file-form {
-    height: 15vh;
+    height: 5vh;
 }
 
 #display {

@@ -18,7 +18,7 @@ function other() {
   const fileFilter = filter(file => file.stat.isFile());
 
   return gulp.src(
-    ['/css/**', '/fonts/**', '/images/**', '/js/**'].map(dir => path.join(conf.paths.page, dir)),
+    ['/css/**', '/fonts/**', '/images/**', '/js/**','/experiment/**'].map(dir => path.join(conf.paths.page, dir)),
     { base: `${conf.paths.page}` })
     .pipe(fileFilter)
     .pipe(gulp.dest(conf.paths.dist));
@@ -28,7 +28,7 @@ function tmp() {
   const fileFilter = filter(file => file.stat.isFile());
 
   return gulp.src(
-    ['/css/**', '/fonts/**', '/images/**', '/js/**'].map(dir => path.join(conf.paths.page, dir)),
+    ['/css/**', '/fonts/**', '/images/**', '/js/**', '/experiment/**'].map(dir => path.join(conf.paths.page, dir)),
     { base: `${conf.paths.page}` })
     .pipe(fileFilter)
     .pipe(gulp.dest(conf.paths.tmp));
