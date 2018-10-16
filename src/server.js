@@ -83,6 +83,7 @@ class Server {
           debugState: 'in Debugging',
           output: output,
           sourcetext: sourcetext,
+          step: this.count
         };
         return ret;
       }
@@ -114,6 +115,7 @@ class Server {
           debugState: 'Step:' + this.count,
           output: output,
           sourcetext: sourcetext,
+          step: this.count
         };
         return ret;
       }
@@ -127,6 +129,7 @@ class Server {
             debugState: `Step:${this.count} | Value:${stackData.getCurrentValue()}`,
             output: output,
             sourcetext: sourcetext,
+            step: this.count
           };
           return ret;
         } else if (this.isExecuting) {
@@ -182,6 +185,7 @@ class Server {
           debugState: `Step:${this.count} | Value:${stackData.getCurrentValue()}`,
           output: output,
           sourcetext: sourcetext,
+          step: this.count
         };
         return ret;
       }
@@ -192,6 +196,7 @@ class Server {
           debugState: 'STOP',
           output: '',
           sourcetext: sourcetext,
+          step: this.count
         };
         return ret;
       }

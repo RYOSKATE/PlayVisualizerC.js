@@ -30,8 +30,10 @@ export const setEditorAndExperiment = (index, code, editor) => {
         return;
     } 
 
+    
     $("#description").html(exText);
 
+    $("#debug").prop("disabled", true);
     $('#exans').prop('disabled', true);
     
     const exStartElem = document.getElementById("exstart");    
@@ -39,6 +41,7 @@ export const setEditorAndExperiment = (index, code, editor) => {
 
     $('#exstart').click(function (e) { 
         stopwatch.start();
+        $("#debug").prop("disabled", false);
         $('#exstart').prop('disabled', true);
         $('#exans').prop('disabled', false);
         $("#description").html(exTexts[index]);

@@ -46,6 +46,7 @@ localStorage.removeItem('index');
 if(index === 0){
   const editor = createEditor('editorMain', true, defaultSourceCode );
   createConsoleEditor('output', '', editor);
+  setEditorAndExperiment(index,defaultSourceCode,editor);
 } else {
   const editor = createEditor('editorMain', true, '');
   createConsoleEditor('output', '', editor);
