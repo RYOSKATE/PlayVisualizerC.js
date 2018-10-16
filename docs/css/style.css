@@ -9,8 +9,16 @@
     height: 14vh;
 }
 
+#exstart {
+    margin-bottom: -2px;
+}
+
+#exans {
+    margin-bottom: -2px;
+}
+
 #editorMain {
-    height: 73vh;
+    height: 55vh;
 }
 
 #output {

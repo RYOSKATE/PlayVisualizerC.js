@@ -52,6 +52,7 @@ export const setEditorAndExperiment = (index, code, editor) => {
         if(!stopwatch.isRunning()){
             return;
         }
+        $('#exans').prop('disabled', true);
         stopwatch.stop();
         const answers = [ "",
             "a=3,b=2,c=1,d=4,e=6",
