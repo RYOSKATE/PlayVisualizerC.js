@@ -6,38 +6,78 @@
     <meta charset="utf-8" />
     <title>PlayVisualizerC.js</title>
     <link rel="stylesheet" type="text/css" media="screen" href="../css/bootstrap.min.css">
+    <script src="../js/jquery-2.1.4.min.js" type="text/javascript"></script>
 </head>
 
 <body>
 <br>
+    <div style="margin: 10px;">
+        <input type="button" class="btn btn-lg" onClick="movePage(0)" value="visualizerデモページへ">
+        <br>
+        <br>
 
-<input type="button" class="btn btn-lg" onClick="movePage(0)" value="visualizerデモページへ">
-    <br>
-    <br>
+        初めにデモページで本ツールの基本的な機能について理解し、<br>
+        その後、以下の実験用ページ1,2,3,4で問題を解いてください。<br>
 
-    初めにデモページで本ツールの基本的な機能について理解し、<br>
-    その後、以下の実験用ページ1,2,3,4で問題を解いてください。<br>
+        ブラウザの戻るボタンは使わないように注意してください。(無効化しています)<br>
 
-    「回答にかかった時間」「正解・不正解」が調査対象です。<br>
-    用紙にメモして報告してください。<br>
-    <hr>
-    <input type="button" class="btn btn-default" onClick="movePage(1)" value="experiment1へ">
-    
-    <br>
-    <input type="button" class="btn btn-default" onClick="movePage(2)" value="experiment2へ">
+        「回答にかかった時間」「正解・不正解」が調査対象です。<br>
+        用紙にメモして報告してください。<br>
+        <hr>
+        <input type="button" class="btn btn-default" style="margin-bottom: 10px;" onClick="movePage(1)" value="experiment1へ">
+        
+        <br>
+        <input type="button" class="btn btn-default" style="margin-bottom: 10px;" onClick="movePage(2)" value="experiment2へ">
 
-    <br>
-    <input type="button" class="btn btn-default" onClick="movePage(3)" value="experiment3へ">
+        <br>
+        <input type="button" class="btn btn-default" style="margin-bottom: 10px;" onClick="movePage(3)" value="experiment3へ">
 
-    <br>
-    <input type="button" class="btn btn-default" onClick="movePage(4)" value="experiment4へ">
+        <br>
+        <input type="button" class="btn btn-default" style="margin-bottom: 10px;" onClick="movePage(4)" value="experiment4へ">
 
-    <br>
+        <hr>
+        <br><br><br><br>
+        <input type="button" class="btn btn-default" style="position: absolute; right: 10px;" onClick="saveLog()" value="ログを保存する">
+        <br><br><br>
+        <input type="button" class="btn btn-default" style="position: absolute; right: 10px;" onClick="deleteLog()" value="ログを消去する">
+    </div>
 </body>
 <script>
+// ブラウザの戻る禁止
+history.pushState(null, null, null);
+$(window).on("popstate", function (event) {
+    if (!event.originalEvent.state) {
+        history.pushState(null, null, null);
+        return;
+    }
+});
 function movePage(index) {
     localStorage.index = index;
     location.href='../index.html';
+}
+function saveLog() {
+    var text = localStorage.logtext.replace(/},{/g,'},\n{');
+    text += ']';
+    var now = new Date();
+    var filename = "pvcjs_"+now.toLocaleString().replace(/\//g,'').replace(/:/g,'') + ".json";
+    // バイナリデータを作ります。
+    var blob = new Blob([text], {type: "text/plain"});
+
+    // IEか他ブラウザかの判定
+    if(window.navigator.msSaveBlob) {
+        // IEなら独自関数を使います。
+        window.navigator.msSaveBlob(blob, filename);
+    } else {
+        // それ以外はaタグを利用してイベントを発火させます
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.target = '_blank';
+        a.download = filename;
+        a.click();
+    }
+}
+function deleteLog(){
+    localStorage.logtext = '[';
 }
 </script>
 </html>

@@ -2,8 +2,9 @@ import { createConsoleEditor, createEditor } from './editor';
 import { file_upload } from './file';
 import showLanguage from './language';
 import {ex, setEditorAndExperiment} from './experiment';
+import {restartLogging, flushLogToSave ,addLog} from './log';
 
-window.GlobalStorage = { isStdin: false, line: 0, debug: false, lang: 'jp' };
+window.GlobalStorage = { isStdin: false, line: 0, debug: false, lang: 'jp', log: [] };
 
 // エディタを初期化
 const defaultSourceCode = String.raw`#include<stdio.h>
@@ -42,16 +43,22 @@ int main(){
 
 const index = Number(localStorage.index);
 localStorage.removeItem('index');
-
+restartLogging();
 if(index === 0){
+  addLog('DEMO');
   const editor = createEditor('editorMain', true, defaultSourceCode );
   createConsoleEditor('output', '', editor);
   setEditorAndExperiment(index,defaultSourceCode,editor);
 } else {
+  addLog(`EX${index}`);
   const editor = createEditor('editorMain', true, '');
   createConsoleEditor('output', '', editor);
   setEditorAndExperiment(index, ex[index-1], editor);
 }
+
+$('#gototop').on('click', function() {
+  flushLogToSave();
+});
 
 // ファイルアップロード時の処理
 document.getElementById('files').addEventListener('change', file_upload, false);

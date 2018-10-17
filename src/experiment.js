@@ -4,6 +4,8 @@ import ex2 from './taskcode/ex2';
 import ex3 from './taskcode/ex3';
 import ex4 from './taskcode/ex4';
 import Stopwatch from './stopwatch';
+import {restartLogging, stopLogging ,addLog, saveLog} from './log';
+
 export const ex = [ex1, ex2, ex3, ex4];
 
 export const setEditorAndExperiment = (index, code, editor) => {
@@ -18,10 +20,10 @@ export const setEditorAndExperiment = (index, code, editor) => {
 (この開始前説明文は全ての問題ページで共通です。)`;
 
     const exTexts = [ "",
-"ポインタ渡し関数の問題です<br>以下のプログラムを実行したとき<br>最終的なa,b,c,d,eの値は？(回答例:a=1,b=2,c=3,d=4,e=5)",
+"ポインタ渡し関数の問題です。<br>以下のプログラムを実行したとき<br>最終的なa,b,c,d,eの値は？(回答例:a=1,b=2,c=3,d=4,e=5)",
 "階乗を計算する関数の問題です。<br>以下のプログラムを実行したとき<br>関数fが3度目にreturnするときのrと<br>そのときのn,(*pn)の表す値は？(回答例:n=1,r=2,(*pn)=3)",
-"メモリの動的確保の問題です<br>以下のプログラムを実行したときmain関数がreturnする時点で<br>ヒープ領域に未開放のメモリ領域があれば<br>そのメモリを参照する変数とそれらのメモリ上の値は何か？(回答例:ps[0]={1,2,3},ps[3]={0,3,2})",
-"再帰関数の問題です<br>以下のプログラムを実行したとき<br>n=1, a='B', b='A', c='C'<br>になるのは関数Hが何回呼ばれたときか？(回答例:10回目)"
+"メモリの動的確保の問題です。<br>以下のプログラムを実行したときmain関数がreturnする時点で<br>ヒープ領域に未開放のメモリ領域があれば<br>そのメモリを参照する変数とそれらのメモリ上の値は何か？<br>(回答例:ps[0]={1,2,3},ps[3]={0,3,2})",
+"再帰関数の問題です。<br>以下のプログラムを実行したとき<br>最初にn=1, a='B', b='A', c='C'<br>となるのは関数Hが何回呼ばれたときか？(回答例:10回目)"
     ];
 
     if(index === 0) {
@@ -40,6 +42,7 @@ export const setEditorAndExperiment = (index, code, editor) => {
     const stopwatch = new Stopwatch(exStartElem, exStartElem);
 
     $('#exstart').click(function (e) { 
+        addLog("#exstart");
         stopwatch.start();
         $("#debug").prop("disabled", false);
         $('#exstart').prop('disabled', true);
@@ -49,6 +52,7 @@ export const setEditorAndExperiment = (index, code, editor) => {
         editor.setReadOnly(true);
     });
     $('#exans').click(function (e) {
+        addLog("#exans");
         if(!stopwatch.isRunning()){
             return;
         }

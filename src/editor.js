@@ -2,6 +2,8 @@ import { CanvarDrawer } from './painter';
 import { dispLoading, removeLoading } from './window';
 import server from './server';
 
+import {restartLogging, stopLogging ,addLog, saveLog} from './log';
+
 export const createConsoleEditor = (idName, text, sourceCodeEditor) => {
   require('ace-min-noconflict');
   require('ace-min-noconflict/mode-c_cpp');
@@ -85,10 +87,12 @@ export const createEditor = (idName, canWrite, initText) => {
       CanvarDrawer.clearMemoryState();
     };
     $('#debug').click(function() {
+      addLog('#debug');
       const text = sourceCodeEditor.getValue();
       if (text.length <= 1) {
         alert('ソースコードがありません！');
         CanvarDrawer.clearMemoryState();
+        addLog('#debug,no-code');
       } else {
         const jsondata = {
           //送りたいJSONデータ
@@ -108,6 +112,7 @@ export const createEditor = (idName, canWrite, initText) => {
       }
     });
     $('#reset').click(function() {
+      addLog('#reset');
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -124,6 +129,7 @@ export const createEditor = (idName, canWrite, initText) => {
       }
     });
     $('#exec').click(function() {
+      addLog('#exec');
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -134,12 +140,14 @@ export const createEditor = (idName, canWrite, initText) => {
           lineNumOfBreakpoint,
         };
         send(jsondata, sourceCodeEditor);
+        
       } else {
         showNotDebuggingMsg();
       }
     });
 
     $('#step').click(function() {
+      addLog('#step');
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -154,6 +162,7 @@ export const createEditor = (idName, canWrite, initText) => {
       }
     });
     $('#back').click(function() {
+      addLog('#back');
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -168,6 +177,7 @@ export const createEditor = (idName, canWrite, initText) => {
       }
     });
     $('#stop').click(function() {
+      addLog('#stop');
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -196,6 +206,7 @@ export const createEditor = (idName, canWrite, initText) => {
   //sourceCodeEditor.getSession().setUseWrapMode(true);//true:折り返し、false:横スクロールバー
 
   $('#font-size').click(function(e) {
+    addLog('#font-size');
     sourceCodeEditor.setFontSize($(e.target).data('size'));
   });
 

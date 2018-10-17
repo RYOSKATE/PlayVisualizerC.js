@@ -8,7 +8,7 @@ export default class Stopwatch {
         this.results = results;
         this.laps = [];
         this.reset();
-        //this.print(this.times);
+        this.print();
     }
 
     reset() {
@@ -28,13 +28,15 @@ export default class Stopwatch {
     }
 
     lap() {
-        let times = this.times;
+        const times = this.times;
         if (this.running) {
             this.reset();
         }
-        let li = document.createElement('li');
-        li.innerText = this.format(times);
-        this.results.appendChild(li);
+        if(this.results){
+            const li = document.createElement('li');
+            li.innerText = this.format(times);        
+            this.results.appendChild(li);
+        }
     }
 
     stop() {
@@ -52,7 +54,9 @@ export default class Stopwatch {
     }
 
     clear() {
-        clearChildren(this.results);
+        if(this.results){
+            clearChildren(this.results);
+        }      
     }
 
     step(timestamp) {
@@ -80,7 +84,9 @@ export default class Stopwatch {
     }
 
     print() {
-        this.display.innerText = this.format(this.times);
+        if(this.display){
+            this.display.innerText = this.format(this.times);
+        }        
     }
 
     pad0(num) {
@@ -89,5 +95,9 @@ export default class Stopwatch {
 
     format(times) {
         return `${this.pad0(times[0], 2)}:${this.pad0(times[1], 2)}:${this.pad0(Math.floor(times[2]), 2)}`;
+    }
+
+    seconds(){
+        return this.times[0] *60 + this.times[1] + this.times[2] / 100;
     }
 }

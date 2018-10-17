@@ -22,6 +22,14 @@
         if(typeof localStorage.index === 'undefined') {
             location.href='./experiment/home.html';
         }
+        // ブラウザの戻る禁止
+        history.pushState(null, null, null);
+        $(window).on("popstate", function (event) {
+            if (!event.originalEvent.state) {
+                history.pushState(null, null, null);
+                return;
+            }
+        });
     </script>
 </head>
 
@@ -41,7 +49,7 @@
                                         <a href="#popup1" class="popup_btn jp">使い方</a>
                                         <a href="#popup1" class="popup_btn en">How to use</a>                                        
                                     </div>
-                                    <a href="./experiment/home.html" class="col-lg-8 col-md-6 col-sm-6 col-xs-6">トップページへ戻る</a><br>
+                                    <a href="./experiment/home.html" id="gototop" class="col-lg-8 col-md-6 col-sm-6 col-xs-6">トップページへ戻る</a><br>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
