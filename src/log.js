@@ -23,4 +23,5 @@ export const flushLogToSave = () => {
         localStorage.logtext += ',\n';
     }
     localStorage.logtext += text;
+    console.log(localStorage);
 };

@@ -40,7 +40,7 @@ export const setEditorAndExperiment = (index, code, editor) => {
     
     const exStartElem = document.getElementById("exstart");    
     const stopwatch = new Stopwatch(exStartElem, exStartElem);
-
+    $('#exstart').html('実験開始');
     $('#exstart').click(function (e) { 
         addLog("#exstart");
         stopwatch.start();
