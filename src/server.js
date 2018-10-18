@@ -206,7 +206,7 @@ class Server {
           debugState: 'STOP',
           output: '',
           sourcetext: sourcetext,
-          step: this.count,
+          step: -1,
           preDebugState
         };
         return ret;
