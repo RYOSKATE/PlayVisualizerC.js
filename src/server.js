@@ -65,7 +65,8 @@ class Server {
 
   ajaxCall(obj) {
     const stackData = obj['stackData'];
-    const debugState = obj['debugState'];
+    const preDebugState = obj['debugState'];
+    const debugState = preDebugState;
     const output = obj['output'];
     const sourcetext = obj['sourcetext'];
     switch (debugState) {
@@ -83,7 +84,8 @@ class Server {
           debugState: 'in Debugging',
           output: output,
           sourcetext: sourcetext,
-          step: this.count
+          step: this.count,
+          preDebugState
         };
         return ret;
       }
@@ -104,6 +106,7 @@ class Server {
             break;
           }
         } while (ret.debugState != 'EOF' && ret.debugState != 'stdin');
+        ret.preDebugState = preDebugState;
         return ret;
       }
       case 'reset': {
@@ -115,7 +118,8 @@ class Server {
           debugState: 'Step:' + this.count,
           output: output,
           sourcetext: sourcetext,
-          step: this.count
+          step: this.count,
+          preDebugState
         };
         return ret;
       }
@@ -129,7 +133,8 @@ class Server {
             debugState: `Step:${this.count} | Value:${stackData.getCurrentValue()}`,
             output: output,
             sourcetext: sourcetext,
-            step: this.count
+            step: this.count,
+            preDebugState
           };
           return ret;
         } else if (this.isExecuting) {
@@ -161,6 +166,8 @@ class Server {
             debugState: stateText,
             output: output,
             sourcetext: sourcetext,
+            step: this.count,
+            preDebugState
           };
           return ret;
         } else {
@@ -170,6 +177,8 @@ class Server {
             debugState: 'EOF',
             output: '',
             sourcetext: sourcetext,
+            step: this.count,
+            preDebugState
           };
           return ret;
         }
@@ -185,7 +194,8 @@ class Server {
           debugState: `Step:${this.count} | Value:${stackData.getCurrentValue()}`,
           output: output,
           sourcetext: sourcetext,
-          step: this.count
+          step: this.count,
+          preDebugState
         };
         return ret;
       }
@@ -196,7 +206,8 @@ class Server {
           debugState: 'STOP',
           output: '',
           sourcetext: sourcetext,
-          step: this.count
+          step: this.count,
+          preDebugState
         };
         return ret;
       }

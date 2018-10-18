@@ -86,13 +86,11 @@ export const createEditor = (idName, canWrite, initText) => {
       alert('デバッグ開始ボタンを押してください');
       CanvarDrawer.clearMemoryState();
     };
-    $('#debug').click(function() {
-      addLog('#debug');
+    $('#debug').click(function() {      
       const text = sourceCodeEditor.getValue();
       if (text.length <= 1) {
         alert('ソースコードがありません！');
-        CanvarDrawer.clearMemoryState();
-        addLog('#debug,no-code');
+        CanvarDrawer.clearMemoryState();        
       } else {
         const jsondata = {
           //送りたいJSONデータ
@@ -111,8 +109,7 @@ export const createEditor = (idName, canWrite, initText) => {
         $("#exec").prop("disabled", false);
       }
     });
-    $('#reset').click(function() {
-      addLog('#reset');
+    $('#reset').click(function() {      
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -128,8 +125,7 @@ export const createEditor = (idName, canWrite, initText) => {
         showNotDebuggingMsg();
       }
     });
-    $('#exec').click(function() {
-      addLog('#exec');
+    $('#exec').click(function() {      
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -146,8 +142,7 @@ export const createEditor = (idName, canWrite, initText) => {
       }
     });
 
-    $('#step').click(function() {
-      addLog('#step');
+    $('#step').click(function() {      
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -161,8 +156,7 @@ export const createEditor = (idName, canWrite, initText) => {
         showNotDebuggingMsg();
       }
     });
-    $('#back').click(function() {
-      addLog('#back');
+    $('#back').click(function() {      
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -176,8 +170,7 @@ export const createEditor = (idName, canWrite, initText) => {
         showNotDebuggingMsg();
       }
     });
-    $('#stop').click(function() {
-      addLog('#stop');
+    $('#stop').click(function() {      
       if (window.GlobalStorage.debug == true) {
         const jsondata = {
           //送りたいJSONデータ
@@ -282,7 +275,7 @@ const send = (jsondata, editor) => {
       }
     })
       .then((ret) => {
-        localStorage.step = ret.step;
+        addLog(ret.preDebugState, ret.step);
         document.getElementById('debugStatus').innerHTML = 'DebugStatus:' + ret.debugState;
         if (ret.debugState == 'stdin') {
           window.GlobalStorage.isStdin = true;

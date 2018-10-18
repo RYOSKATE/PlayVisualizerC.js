@@ -2,7 +2,6 @@ import Stopwatch from './stopwatch';
 const stopwatch = new Stopwatch();
 export const restartLogging = () => {
     stopwatch.restart();
-    localStorage.step = -1;
 };
 
 export const stopLogging = () => {
@@ -13,16 +12,18 @@ export const isLogging = () => {
     return stopwatch.isRunning();
 };
 
-export const addLog = (text) => {
+export const addLog = (text, step) => {
     const logs = window.GlobalStorage.log;
-    const time = stopwatch.seconds().toFixed(2);
-    const step = localStorage.step;
+    const time = Number(stopwatch.seconds().toFixed(2));
     let previousTime = 0;
     if(1 < logs.length){
         const log = logs[logs.length - 1];
         previousTime = Number(log.time);
     }
-    const spent = Number(time) - previousTime;
+    if (typeof step === "undefined") {
+        step = -1;
+    }
+    const spent = Number((Number(time) - previousTime).toFixed(2));
     window.GlobalStorage.log.push({time, text, step, spent});
 };
 
