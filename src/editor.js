@@ -282,6 +282,7 @@ const send = (jsondata, editor) => {
       }
     })
       .then((ret) => {
+        localStorage.step = ret.step;
         document.getElementById('debugStatus').innerHTML = 'DebugStatus:' + ret.debugState;
         if (ret.debugState == 'stdin') {
           window.GlobalStorage.isStdin = true;
