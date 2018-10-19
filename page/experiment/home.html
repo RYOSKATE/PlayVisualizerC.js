@@ -80,7 +80,10 @@ function saveLog() {
     }
 }
 function deleteLog(){
-    localStorage.logtext = '[';
+    const result = confirm('ログを削除しますか？');
+    if(result) {
+        localStorage.logtext = '[';
+    }
 }
 </script>
 </html>
