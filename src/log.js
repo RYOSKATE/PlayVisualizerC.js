@@ -29,7 +29,9 @@ export const addLog = (text, step) => {
 
 export const flushLogToSave = () => {
     const text = JSON.stringify(window.GlobalStorage.log);
-    if(localStorage.logtext !== '[') {
+    if(typeof localStorage.logtext === 'undefined') {
+        localStorage.logtext = '[';
+    } else if(localStorage.logtext !== '[') {
         localStorage.logtext += ',\n';
     }
     localStorage.logtext += text;
