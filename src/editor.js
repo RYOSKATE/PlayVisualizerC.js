@@ -278,7 +278,7 @@ const send = (jsondata, editor) => {
         drawVisualizedResult(ret, editor);
       })
       .catch((e) => {
-        alert('invalid data');
+        alert(e);
         console.error(e);
       })
       .finally(() => {
