@@ -32,7 +32,7 @@
     "@babel/runtime": "7.1.5",
     "@types/lodash": "4.14.118",
     "@types/mathjs": "4.4.3",
-    "@types/node": "10.12.9",
+    "@types/node": "10.12.10",
     "ace-min-noconflict": "1.1.9",
     "babel-loader": "8.0.4",
     "browser-sync": "2.26.3",
