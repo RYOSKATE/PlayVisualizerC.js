@@ -739,15 +739,15 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@types/lodash@4.14.118":
-  version "4.14.118"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.118.tgz#247bab39bfcc6d910d4927c6e06cbc70ec376f27"
-  integrity sha512-iiJbKLZbhSa6FYRip/9ZDX6HXhayXLDGY2Fqws9cOkEQ6XeKfaxB0sC541mowZJueYyMnVUmmG+al5/4fCDrgw==
+"@types/lodash@4.14.119":
+  version "4.14.119"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.119.tgz#be847e5f4bc3e35e46d041c394ead8b603ad8b39"
+  integrity sha512-Z3TNyBL8Vd/M9D9Ms2S3LmFq2sSMzahodD6rCS9V2N44HUMINb75jNkSuwAx7eo2ufqTdfOdtGQpNbieUjPQmw==
 
-"@types/mathjs@4.4.3":
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/@types/mathjs/-/mathjs-4.4.3.tgz#26de56cf36c4dc4ae40ab2e84e39a88e64e6d1dc"
-  integrity sha512-j/5myj6HSzu73V01hpxmMF+PK1cDP1DVNDKsowAVi/tK/tDds4pL2B3PXaS32e98pMWMjpTZIFQkFYCyd/uwPw==
+"@types/mathjs@4.4.4":
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/@types/mathjs/-/mathjs-4.4.4.tgz#cfc50ec3d2596feec217d9ae19d0ac99b6a5e822"
+  integrity sha512-LMeers6pNvD3YIX7dAPJpNoLTloEL3uqHAlLsROpMYSJuXr8g8pzciyUJofxFKGA5nKWWvWSPHJP5kzscZyoOg==
   dependencies:
     decimal.js "^10.0.0"
 
@@ -7951,10 +7951,10 @@ webpack-log@^2.0.0:
     ansi-colors "^3.0.0"
     uuid "^3.3.2"
 
-webpack-merge@4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.4.tgz#0fde38eabf2d5fd85251c24a5a8c48f8a3f4eb7b"
-  integrity sha512-TmSe1HZKeOPey3oy1Ov2iS3guIZjWvMT2BBJDzzT5jScHTjVC3mpjJofgueEzaEd6ibhxRDD6MIblDr8tzh8iQ==
+webpack-merge@4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.5.tgz#2be31e846c20767d1bef56bdca64c328a681190a"
+  integrity sha512-sVcM+MMJv6DO0C0GLLltx8mUlGMKXE0zBsuMqZ9jz2X9gsekALw6Rs0cAfTWc97VuWS6NpVUa78959zANnMMLQ==
   dependencies:
     lodash "^4.17.5"
 
