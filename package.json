@@ -37,7 +37,7 @@
     "babel-loader": "8.0.5",
     "browser-sync": "2.26.3",
     "browser-sync-spa": "1.0.3",
-    "cache-loader": "1.2.5",
+    "cache-loader": "2.0.1",
     "es6-shim": "0.35.4",
     "eslint": "5.12.1",
     "gulp": "github:gulpjs/gulp#4.0",
