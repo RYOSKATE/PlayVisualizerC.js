@@ -1,3 +1,9 @@
+【Important】
+
+This system has not been maintained yet.
+
+It has evolved into [PLIVET](https://github.com/RYOSKATE/PLIVET).
+
 # PlayVisualizerC.jp  <a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg"></a>
 
 ## For User
