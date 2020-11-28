@@ -737,10 +737,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.120.tgz#cf265d06f6c7a710db087ed07523ab8c1a24047b"
   integrity sha512-jQ21kQ120mo+IrDs1nFNVm/AsdFxIx2+vZ347DbogHJPd/JzKNMOqU6HCYin1W6v8l5R9XSO2/e9cxmn7HAnVw==
 
-"@types/mathjs@4.4.5":
-  version "4.4.5"
-  resolved "https://registry.yarnpkg.com/@types/mathjs/-/mathjs-4.4.5.tgz#b28d46919c68b93bcabf0551729624b302af9b4b"
-  integrity sha512-Z9XyD6ORkE/dTwCGQ4htXaB8D/OkcRhQy4EtEvJ6lRmbgcYoS2q3CAMoB3s2mgQZmyQy85gtJcfbCz85LV1w+Q==
+"@types/mathjs@6.0.7":
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/@types/mathjs/-/mathjs-6.0.7.tgz#89299b8e0dd369c970ee8f477ba2cd2527c56cd0"
+  integrity sha512-UPpG34wVjlr8uSijJ747q0SmC459t294xm/3Ed8GAnqM/I2K786WgCLQ4BO4lIsM07Gj1UhO7x0n0TSfqO0DNQ==
   dependencies:
     decimal.js "^10.0.0"
 
